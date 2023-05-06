@@ -27,8 +27,11 @@ class Controller extends BaseController
                 $otp->is_expired = 1;
                 $otp->save();
                 $user = User::where(['phone_no' => $phone_no ? $phone_no : auth()->user()->phone_no])->first();
-                $user->remember_token = Str::random(64);
-                $user->save();
+                if($user) {
+                    $user->remember_token = Str::random(64);
+                    $user->save();
+                }
+                return $code;
             } else {
                 print_r(json_encode([
                     'status' => 'failed',

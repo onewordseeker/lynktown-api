@@ -25,21 +25,26 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'phone_no' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed'
+            'password' => 'required|string|min:6|confirmed',
+            'account_type' => 'required' // vendor,customer,admin
         ]);
         if ($validator->fails()) {
-            return $this->error('Please check all the fields', 401);
+            $message = $validator->errors()->first();
+            return $this->error($message, 401);
         }
 
         // OTP verification enabled.
-        $this->OTPMiddleware();
+        $this->OTPMiddleware($request->phone_no);
 
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'password' => bcrypt($request->password),
-            'email' => $request->email
+            'email' => $request->email,
+            'phone_no' => $request->phone_no,
+            'account_type' => $request->account_type,
         ]);
 
         return $this->success([

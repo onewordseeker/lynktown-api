@@ -29,7 +29,7 @@ trait ApiMiddleware
 		print_r(json_encode([
 			'status' => 'Success',
 			'message' => 'OTP sent to '.$phone_no,
-			'data' => []
+			'data' => $code
 		]));
 		exit;
 	}
