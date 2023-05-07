@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LynkController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\LynkProductController;
+use App\Http\Controllers\CatalogController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,15 +35,28 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Lynk Routes
     Route::post('/lynk/list', [LynkController::class, 'list']);
     Route::post('/lynk/create', [LynkController::class, 'store']);
-    Route::post('/lynk/signle/{id}', [LynkController::class, 'show']);
+    Route::post('/lynk/single/{id}', [LynkController::class, 'show']);
     Route::post('/lynk/update/{id}', [LynkController::class, 'update']);
     
     // Store Routes
     Route::post('/store/list', [StoreController::class, 'list']);
     Route::post('/store/create', [StoreController::class, 'store']);
-    Route::post('/store/signle/{id}', [StoreController::class, 'show']);
+    Route::post('/store/single/{id}', [StoreController::class, 'show']);
+    Route::post('/store/stats/{id}', [StoreController::class, 'stats']);
     Route::post('/store/update/{id}', [StoreController::class, 'update']);
     
+    // Products
+    Route::post('/products/list', [LynkProductController::class, 'list']);
+    Route::post('/products/single/{id}', [LynkProductController::class, 'show']);
+
+
+    // Store Routes
+    Route::post('/catalog/list', [CatalogController::class, 'list']);
+    Route::post('/catalog/create', [CatalogController::class, 'store']);
+    Route::post('/catalog/single/{id}', [CatalogController::class, 'show']);
+    Route::post('/catalog/update/{id}', [CatalogController::class, 'update']);
+    
+
     Route::post('/test', [AuthController::class, 'test']);
 
     Route::post('/profile-edit', [UserController::class, 'profileEdit']);

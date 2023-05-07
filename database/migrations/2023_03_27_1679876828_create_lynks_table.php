@@ -14,6 +14,11 @@ class CreateLynksTable extends Migration
 		$table->integer('store_id')->nullable()->unsigned();
 		$table->text('url')->nullable();
 		$table->integer('customer_id')->nullable()->unsigned();
+		$table->integer('pkg_height')->nullable()->unsigned();
+		$table->integer('pkg_width')->nullable()->unsigned();
+		$table->integer('pkg_length')->nullable()->unsigned();
+		$table->integer('pkg_weight')->nullable()->unsigned();
+		$table->string('shipping_charges')->nullable()->unsigned();
 		$table->integer('exchange_limit')->nullable();
 		$table->text('status')->nullable();
         $table->timestamps();

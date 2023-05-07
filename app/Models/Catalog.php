@@ -11,6 +11,11 @@ class Catalog extends Model
 
     protected $fillable = [
         'category',
+        'store_id',
         'status',
     ];
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
 }

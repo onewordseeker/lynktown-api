@@ -12,6 +12,7 @@ class CreateCatalogsTable extends Migration
 
 		$table->increments('id');
 		$table->string('category',200)->nullable();
+		$table->integer('store_id',200)->nullable();
 		$table->string('status',200)->nullable();
         $table->timestamps();
 

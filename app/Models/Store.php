@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,4 +10,16 @@ class Store extends Model
         'user_id', 'store_logo', 'store_header_cover', 'brand_color', 'store_address',
         'store_email', 'storephoneno', 'category', 'status', 'note', 'accepting_orders', 'deleted'
     ];
+    public function logo()
+    {
+        return $this->belongsTo(Asset::class, 'store_logo');
+    }
+    public function cover()
+    {
+        return $this->belongsTo(Asset::class, 'store_header_cover');
+    }
+    public function catalogs()
+    {
+        return $this->hasMany(Catalog::class, 'store_id');
+    }
 }

@@ -12,6 +12,7 @@ class CreateStoresTable extends Migration
 
 		$table->increments('id');
 		$table->integer('user_id')->nullable()->unsigned();
+		$table->integer('store_uid')->nullable()->unsigned();
 		$table->integer('store_logo')->nullable()->unsigned();
 		$table->integer('store_header_cover')->nullable()->unsigned();
 		$table->string('brand_color',20)->nullable();

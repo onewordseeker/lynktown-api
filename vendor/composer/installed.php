@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'laravel/laravel',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '4bfa8b0714f00b2e9d911fef645bbdecf7bcd7e3',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -451,15 +451,6 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'kreait/laravel-firebase' => array(
-            'pretty_version' => '5.2.0',
-            'version' => '5.2.0.0',
-            'reference' => '210bc5488963462265c90fa2df8494a009089500',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../kreait/laravel-firebase',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'laravel/framework' => array(
             'pretty_version' => 'v10.9.0',
             'version' => '10.9.0.0',
@@ -470,9 +461,9 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '4bfa8b0714f00b2e9d911fef645bbdecf7bcd7e3',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -771,12 +762,6 @@
             'install_path' => __DIR__ . '/../psr/cache',
             'aliases' => array(),
             'dev_requirement' => false,
-        ),
-        'psr/cache-implementation' => array(
-            'dev_requirement' => false,
-            'provided' => array(
-                0 => '2.0|3.0',
-            ),
         ),
         'psr/clock' => array(
             'pretty_version' => '1.0.0',
@@ -1130,30 +1115,6 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
-        'symfony/cache' => array(
-            'pretty_version' => 'v6.2.10',
-            'version' => '6.2.10.0',
-            'reference' => '1ce7ed8e7ca6948892b6a3a52bb60cf2b04f7c94',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/cache',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/cache-contracts' => array(
-            'pretty_version' => 'v3.2.1',
-            'version' => '3.2.1.0',
-            'reference' => 'eeb71f04b6f7f34ca6d15633df82e014528b1632',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/cache-contracts',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/cache-implementation' => array(
-            'dev_requirement' => false,
-            'provided' => array(
-                0 => '1.1|2.0|3.0',
-            ),
-        ),
         'symfony/console' => array(
             'pretty_version' => 'v6.2.10',
             'version' => '6.2.10.0',
@@ -1406,15 +1367,6 @@
             'reference' => '41a750a23412ca76fdbbf5096943b4134272c1ab',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/var-dumper',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/var-exporter' => array(
-            'pretty_version' => 'v6.2.10',
-            'version' => '6.2.10.0',
-            'reference' => '9a07920c2058bafee921ce4d90aeef2193837d63',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/var-exporter',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

@@ -15,5 +15,10 @@ class Lynk extends Model
         'customer_id',
         'exchange_limit',
         'status',
+        'pkg_width',
+        'pkg_height',
+        'pkg_length',
+        'pkg_weight',
+        'shipping_charges',
     ];
 }

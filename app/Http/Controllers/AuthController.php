@@ -23,11 +23,9 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'phone_no' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
+            'name' => 'required|string|max:255',
+            'email' => 'string|email|unique:users,email',
+            'phone_no' => 'required|string|max:255|unique:users,phone_no',
             'account_type' => 'required' // vendor,customer,admin
         ]);
         if ($validator->fails()) {
@@ -39,12 +37,11 @@ class AuthController extends Controller
         $this->OTPMiddleware($request->phone_no);
 
         $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'password' => bcrypt($request->password),
+            'name' => $request->first_name,
             'email' => $request->email,
             'phone_no' => $request->phone_no,
-            'account_type' => $request->account_type,
+            'password' => bcrypt('12345678'),
+            'account_type' => $request->account_type, // admin, customer, fashion-designer, fashion-retailer
         ]);
 
         return $this->success([
@@ -55,10 +52,9 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $attr = $request->validate([
-            'email' => 'required|string|email|',
-            'password' => 'required|string|min:6'
+            'phone_no' => 'required|string|',
         ]);
-
+        $attr['password'] = '12345678';
         if (!Auth::attempt($attr)) {
             return $this->error('Credentials not match', 401);
         }

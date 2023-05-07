@@ -2,9 +2,8 @@
 
 namespace App\Traits;
 
-use Carbon\Carbon;
 use App\Models\PhoneVerification;
-
+    
 /*
 |--------------------------------------------------------------------------
 | Api Responser Trait
@@ -16,6 +15,7 @@ use App\Models\PhoneVerification;
 
 trait ApiMiddleware
 {
+    
 	/**
      * Make OTP request.
      *
@@ -50,5 +50,4 @@ trait ApiMiddleware
 		$phoneVerification->save();
 		return $code;
 	}
-
 }
