@@ -32,7 +32,12 @@ class AuthController extends Controller
             $message = $validator->errors()->first();
             return $this->error($message, 401);
         }
-
+        print_r(json_encode([
+            'status' => 'failed',
+            'message' => 'Invalid OTP',
+            'data' => $request
+        ]));
+        exit;
         // OTP verification enabled.
         $this->OTPMiddleware($request->phone_no);
 
