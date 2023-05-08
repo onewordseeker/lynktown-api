@@ -32,7 +32,7 @@ class AuthController extends Controller
             $message = $validator->errors()->first();
             return $this->error($message, 401);
         }
-        return $this->success($_POST, '', 401);
+        return $this->success($_POST, '', 200);
         // OTP verification enabled.
         $this->OTPMiddleware($request->phone_no);
 
