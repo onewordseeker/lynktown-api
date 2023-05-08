@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Models\PhoneVerification;
 use App\Models\User;
+use App\Models\Store;
 use Illuminate\Support\Str;
 
 class Controller extends BaseController
@@ -40,6 +41,17 @@ class Controller extends BaseController
                 ]));
                 exit;
             }
+        }
+    }
+    function verifyStoreAction($store_id) {
+        $store = Store::find($store_id);
+        if(!$store) {
+            print_r(json_encode([
+                'status' => 'failed',
+                'message' => 'Invalid request',
+                'data' => []
+            ]));
+            exit;
         }
     }
 }

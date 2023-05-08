@@ -12,7 +12,6 @@ class Lynk extends Model
     protected $fillable = [
         'store_id',
         'url',
-        'customer_id',
         'exchange_limit',
         'status',
         'pkg_width',
@@ -21,4 +20,8 @@ class Lynk extends Model
         'pkg_weight',
         'shipping_charges',
     ];
+    public function products()
+    {
+        return $this->hasMany(LynkProduct::class, 'lynk_id');
+    }
 }

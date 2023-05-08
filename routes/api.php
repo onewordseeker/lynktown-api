@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LynkController;
 use App\Http\Controllers\StoreController;
-use App\Http\Controllers\LynkProductController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CatalogController;
 /*
 |--------------------------------------------------------------------------
@@ -46,8 +46,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/store/update/{id}', [StoreController::class, 'update']);
     
     // Products
-    Route::post('/products/list', [LynkProductController::class, 'list']);
-    Route::post('/products/single/{id}', [LynkProductController::class, 'show']);
+    Route::post('/product/list', [ProductController::class, 'list']);
+    Route::post('/product/add_to_catalog', [ProductController::class, 'addToCatalog']);
+    Route::post('/product/delete-from-catalog', [ProductController::class, 'deleteFromCatalog']);
+    Route::post('/product/create', [ProductController::class, 'store']);
+    Route::post('/product/update', [ProductController::class, 'update']);
+    Route::post('/product/single/{id}', [ProductController::class, 'show']);
 
 
     // Store Routes

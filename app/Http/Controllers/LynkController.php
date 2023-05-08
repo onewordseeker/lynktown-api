@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Lynk;
 use App\Models\LynkProduct;
+use App\Models\Lynk;
+use App\Models\Asset;
 use App\Models\Product;
+use App\Models\Store;
 use Illuminate\Support\Facades\Validator;
 
 class LynkController extends Controller
 {
     //
     function list(Request $request) {
-        $lynks = Lynk::where(['customer_id' => auth()->user()->id])->with('LynkProduct')->get();
+        $store = Store::where(['user_id' => auth()->user()->id])->first();
+        $lynks = Lynk::where(['lynks.store_id' => $store->id])->with('lynk_products')->join('products', 'products.id', 'product_id')->get();
         return $this->success([
             $lynks
         ]);
@@ -23,23 +25,34 @@ class LynkController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'store_id' => 'required|integer',
-            'url' => 'required|url',
             'exchange_limit' => 'required|integer',
             'pkg_width' => 'required|integer',
             'pkg_height' => 'required|integer',
             'pkg_length' => 'required|integer',
             'pkg_weight' => 'required|integer',
-            'shipping_charges' => 'required|string', // customer, vendor
+            'shipping_charges' => 'required|string',
             'products' => 'required'
         ]);
         if ($validator->fails()) {
             $message = $validator->errors()->first();
             return $this->error($message, 401);
         }
-        
-        $lynk = Lynk::create($validator);
-        $products = $request->input('products');
-        $_products = Product::create($products);
+        $lynk = Lynk::create($validator->validated());
+        $products = $validator->validated()['products'];
+        $index = 0;
+        foreach($products as $product) {
+            $product['store_id'] = $validator->validated()['store_id'];
+            if($request->file('products')[$index]['product_image']) {
+                $storeLogoPath = $request->file('products')[$index]['product_image']->store('uploads');
+                $asset = Asset::create(['url' => $storeLogoPath, 'type' => 'image']);
+                $product['img_id'] = $asset->id;
+            }
+            $p = Product::create($product);
+            LynkProduct::create(['lynk_id' => $lynk->id, 'product_id' => $p->id, 'status' => 1, 'note' => $product['note']]);
+            $_products[] = $p;
+            $index++;
+        }
+        // $validator->validated()['products']
         $lynk->products = $_products;
         return $this->success([
             $lynk
@@ -48,7 +61,7 @@ class LynkController extends Controller
 
     public function show($id)
     {
-        $lynk = Lynk::findOrFail($id);
+        $lynk = Lynk::find($id);
         return $this->success([
             $lynk
         ]);
@@ -71,7 +84,7 @@ class LynkController extends Controller
             $message = $validatedData->errors()->first();
             return $this->error($message, 401);
         }
-        $lynk = Lynk::findOrFail($id);
+        $lynk = Lynk::find($id);
         $lynk->update($validatedData->validated());
         return response()->json($lynk);
     }

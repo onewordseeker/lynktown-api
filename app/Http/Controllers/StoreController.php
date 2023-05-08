@@ -126,7 +126,7 @@ class StoreController extends Controller
     // Get a single store by ID
     public function show($id)
     {
-        $store = Store::with(['logo', 'cover'])->findOrFail($id);
+        $store = Store::with(['logo', 'cover'])->find($id);
         return $this->success([
             $store
         ]);
@@ -134,7 +134,7 @@ class StoreController extends Controller
 
     public function stats($id)
     {
-        $store = Store::with(['catalogs'])->findOrFail($id);
+        $store = Store::with(['catalogs'])->find($id);
         return $this->success([
             $store
         ]);

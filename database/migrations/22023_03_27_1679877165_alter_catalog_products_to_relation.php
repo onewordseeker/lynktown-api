@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('catalog_products', function (Blueprint $table) {
             //
             $table->foreign('catalog_id')->references('id')->on('catalogs')->onDelete('RESTRICT');
-            $table->foreign('product_id')->references('id')->on('order_products')->onDelete('RESTRICT');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('RESTRICT');
         });
     }
 

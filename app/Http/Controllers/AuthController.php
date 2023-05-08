@@ -51,11 +51,18 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $attr = $request->validate([
-            'phone_no' => 'required|string|',
+        $validator = Validator::make($request->all(), [
+            'phone_no' => 'required|string',
         ]);
-        $attr['password'] = '12345678';
-        if (!Auth::attempt($attr)) {
+        if ($validator->fails()) {
+            $message = $validator->errors()->first();
+            return $this->error($message, 401);
+        }
+        $data = [
+            'password' => '12345678',
+            'phone_no' => $validator->validated()['phone_no']
+        ];
+        if (!Auth::attempt($data)) {
             return $this->error('Credentials not match', 401);
         }
         if(auth()->user()->is_deleted) {

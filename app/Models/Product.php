@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'order_id',
-        'product_id',
         'quantity',
+        'store_id',
         'price',
         'discount_price',
         'post_link',
@@ -18,6 +17,10 @@ class Product extends Model
         'size',
         'exchange_available',
         'status',
-        'product_type',
+        'product_type', // ready-made, custom
     ];
+    public function cover()
+    {
+        return $this->belongsTo(Asset::class, 'img_id');
+    }
 }

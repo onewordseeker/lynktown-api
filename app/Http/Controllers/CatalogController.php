@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Catalog;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Catalog;
+use App\Models\Store;
 
 class CatalogController extends Controller
 {
     //
     function list(Request $request) {
-        $data = Catalog::where(['store_id' => $request->store_id])->with('store')->get();
+        $this->verifyStoreAction($request->store_id);
+        $data = Store::with('catalogs')->find($request->store_id);
+        // $data = Catalog::where(['store_id' => $request->store_id])->with('store')->get();
         return $this->success([
             $data
         ]);
@@ -34,7 +37,7 @@ class CatalogController extends Controller
 
     public function show($id)
     {
-        $lynk = Catalog::findOrFail($id);
+        $lynk = Catalog::with('store')->find($id);
         return $this->success([
             $lynk
         ]);
@@ -50,7 +53,7 @@ class CatalogController extends Controller
             return $this->error($message, 401);
         }
 
-        $lynk = Catalog::findOrFail($id);
+        $lynk = Catalog::find($id);
         $lynk->update($validator->validated());
         return response()->json($lynk);
     }

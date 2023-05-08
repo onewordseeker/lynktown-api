@@ -13,7 +13,6 @@ class CreateLynksTable extends Migration
 		$table->increments('id');
 		$table->integer('store_id')->nullable()->unsigned();
 		$table->text('url')->nullable();
-		$table->integer('customer_id')->nullable()->unsigned();
 		$table->integer('pkg_height')->nullable()->unsigned();
 		$table->integer('pkg_width')->nullable()->unsigned();
 		$table->integer('pkg_length')->nullable()->unsigned();

@@ -15,4 +15,8 @@ class LynkProduct extends Model
         'status',
         'note',
     ];
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }
