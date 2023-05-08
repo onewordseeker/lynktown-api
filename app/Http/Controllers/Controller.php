@@ -16,8 +16,8 @@ use Illuminate\Support\Str;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests, ApiResponser, ApiMiddleware;
-    function OTPMiddleware($phone_no = null) {
-        $request = $_POST ? $_POST : $_GET;
+    function OTPMiddleware($phone_no = null, $request = null) {
+        $request = $request ? $request : ($_GET ? $_GET : $_POST);
         if(!isset($request['verification_code'])) {
             $this->sendOTP($phone_no ? $phone_no : auth()->user()->phone_no);
             exit;

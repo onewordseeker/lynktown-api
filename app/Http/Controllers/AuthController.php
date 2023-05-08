@@ -33,9 +33,9 @@ class AuthController extends Controller
             $message = $validator->errors()->first();
             return $this->error($message, 401);
         }
-        // return $this->success($validator->validated(), 'ggggg', 200);
+        return $this->success($validator->validated(), 'ggggg', 200);
         // OTP verification enabled.
-        $this->OTPMiddleware($request->phone_no);
+        $this->OTPMiddleware($request->phone_no, $request);
 
         $user = User::create([
             'name' => $request->first_name,
