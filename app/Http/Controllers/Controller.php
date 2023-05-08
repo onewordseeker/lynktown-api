@@ -18,7 +18,12 @@ class Controller extends BaseController
     use AuthorizesRequests, ValidatesRequests, ApiResponser, ApiMiddleware;
     function OTPMiddleware($phone_no = null) {
         $request = $_POST ? $_POST : $_GET;
-        dd($request);
+        print_r(json_encode([
+            'status' => 'failed',
+            'message' => 'Invalid OTP',
+            'data' => $request
+        ]));
+        exit;
         if(!isset($request['verification_code'])) {
             $this->sendOTP($phone_no ? $phone_no : auth()->user()->phone_no);
             exit;
