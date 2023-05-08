@@ -70,7 +70,7 @@ class AuthController extends Controller
             return $this->error('Your account is deleted, Please talk to the tech team.', 401);
         }
         // OTP verification enabled.
-        $this->OTPMiddleware();
+        $this->OTPMiddleware(null, $request);
 
         return $this->success([
             'token' => auth()->user()->createToken('API Token')->plainTextToken

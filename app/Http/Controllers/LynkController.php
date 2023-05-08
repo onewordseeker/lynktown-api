@@ -15,7 +15,7 @@ class LynkController extends Controller
     //
     function list(Request $request) {
         $store = Store::where(['user_id' => auth()->user()->id])->first();
-        $lynks = Lynk::where(['lynks.store_id' => $store->id])->with('lynk_products')->join('products', 'products.id', 'product_id')->get();
+        $lynks = Lynk::where(['lynks.store_id' => $store->id])->with('products.product')->get();
         return $this->success([
             $lynks
         ]);
@@ -61,7 +61,7 @@ class LynkController extends Controller
 
     public function show($id)
     {
-        $lynk = Lynk::find($id);
+        $lynk = Lynk::with('products.product')->find($id);
         return $this->success([
             $lynk
         ]);
