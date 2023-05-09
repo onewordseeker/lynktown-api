@@ -15,6 +15,9 @@ class LynkController extends Controller
     //
     function list(Request $request) {
         $store = Store::where(['user_id' => auth()->user()->id])->first();
+        if($store) {
+            return $this->error('You have no store yet. Please create one.', 401);
+        }
         $lynks = Lynk::where(['lynks.store_id' => $store->id])->with('products.product')->get();
         return $this->success([
             $lynks
