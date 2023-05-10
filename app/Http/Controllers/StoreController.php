@@ -23,8 +23,8 @@ class StoreController extends Controller
         // Validate the request data
         
         $validatedData = Validator::make($request->all(), [
-            'store_logo' => 'required|image',
-            'store_header_cover' => 'required|image',
+            'store_logo' => 'required|string',
+            'store_header_cover' => 'required|string',
             'brand_color' => 'required|string',
             'store_address' => 'required|string',
             'store_email' => 'required|email',
@@ -58,14 +58,22 @@ class StoreController extends Controller
         $store->accepting_orders = $validatedData->validated()['accepting_orders'];
 
         // Upload store logo image
-        $storeLogoPath = $request->file('store_logo')->store('uploads');
-        $logo = Asset::create(['url' => $storeLogoPath, 'type' => 'image']);
-        $store->store_logo = $logo->id;
-
+        if(isset($request->store_logo)) {
+            // $storeLogoPath = $request->file('store_logo')->store('uploads');
+            $asset = Asset::create(['url' => $request->store_logo, 'type' => 'image']);
+            $product['img_id'] = $asset->id;
+            $store->store_logo = $asset->id;
+        }
+        if(isset($request->store_header_cover)) {
+            // $storeLogoPath = $request->file('store_logo')->store('uploads');
+            $asset = Asset::create(['url' => $request->store_header_cover, 'type' => 'image']);
+            $product['img_id'] = $asset->id;
+            $store->store_header_cover = $asset->id;
+        }
         // Upload store header cover image
-        $storeHeaderCoverPath = $request->file('store_header_cover')->store('uploads');
-        $cover = Asset::create(['url' => $storeHeaderCoverPath, 'type' => 'image']);
-        $store->store_header_cover = $cover->id;
+        // $storeHeaderCoverPath = $request->file('store_header_cover')->store('uploads');
+        // $cover = Asset::create(['url' => $storeHeaderCoverPath, 'type' => 'image']);
+        // $store->store_header_cover = $cover->id;
 
         // Save the new Store instance to the database
         $store->save();
