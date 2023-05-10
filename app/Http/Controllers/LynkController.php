@@ -45,9 +45,9 @@ class LynkController extends Controller
         $index = 0;
         foreach($products as $product) {
             $product['store_id'] = $validator->validated()['store_id'];
-            if(isset($request->file('products')[$index]['product_image'])) {
-                $storeLogoPath = $request->file('products')[$index]['product_image']->store('uploads');
-                $asset = Asset::create(['url' => $storeLogoPath, 'type' => 'image']);
+            if(isset($product['product_image'])) {
+                // $storeLogoPath = $request->file('products')[$index]['product_image']->store('uploads');
+                $asset = Asset::create(['url' => $product['product_image'], 'type' => 'image']);
                 $product['img_id'] = $asset->id;
             }
             $p = Product::create($product);
