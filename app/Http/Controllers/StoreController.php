@@ -43,7 +43,7 @@ class StoreController extends Controller
             return $this->error('Store UID must be unique.', 401);
         }
         // OTP verification enabled.
-        $this->OTPMiddleware();
+        $this->OTPMiddleware(null, $request);
 
         // Create a new Store model instance
         $store = new Store;
@@ -103,7 +103,7 @@ class StoreController extends Controller
         }
 
         // OTP verification enabled.
-        $this->OTPMiddleware();
+        $this->OTPMiddleware(null, $request);
 
         // Create a new Store model instance
         $store = Store::find($id);

@@ -137,7 +137,7 @@ class ProductController extends Controller
         }
 
         // OTP verification enabled.
-        $this->OTPMiddleware();
+        $this->OTPMiddleware(null, $request);
 
         // Create a new Store model instance
         $update->store_id = $validatedData->validated()['store_id'];
