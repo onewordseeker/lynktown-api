@@ -51,7 +51,7 @@ class LynkController extends Controller
         $products = $validator->validated()['products'];
         $index = 0;
         foreach($products as $product) {
-            $product['store_id'] = $validator->validated()['store_id'];
+            $product['store_id'] = $store_data['store_id'];
             $p = Product::create($product);
             LynkProduct::create(['lynk_id' => $lynk->id, 'product_id' => $p->id, 'status' => 1, 'note' => $product['note']]);
             if(isset($product['product_images'])) {
