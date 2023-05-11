@@ -33,11 +33,11 @@ class LynkController extends Controller
         $store = vendorStore();
         $this->verifyStoreAction($store->id);
         $validator = Validator::make($request->all(), [
-            'exchange_limit' => 'required|integer',
-            'pkg_width' => 'required|integer',
-            'pkg_height' => 'required|integer',
-            'pkg_length' => 'required|integer',
-            'pkg_weight' => 'required|integer',
+            'exchange_limit' => 'required|string',
+            'pkg_width' => 'required|string',
+            'pkg_height' => 'required|string',
+            'pkg_length' => 'required|string',
+            'pkg_weight' => 'required|string',
             'shipping_charges' => 'required|string',
             'products' => 'required'
         ]);
@@ -53,7 +53,7 @@ class LynkController extends Controller
         foreach($products as $product) {
             $product['store_id'] = $store_data['store_id'];
             $p = Product::create($product);
-            LynkProduct::create(['lynk_id' => $lynk->id, 'product_id' => $p->id, 'status' => 1, 'note' => $product['note']]);
+            LynkProduct::create(['lynk_id' => $lynk->id, 'product_id' => $p->id, 'status' => 1]);
             if(isset($product['product_images'])) {
                 foreach($product['product_images'] as $image) {
                     $asset = Asset::create(['url' => $image, 'type' => 'image']);
@@ -90,12 +90,12 @@ class LynkController extends Controller
         $this->verifyStoreAction($store->id);
         $validatedData = Validator::make($request->all(), [
             'url' => 'sometimes|required|url',
-            'exchange_limit' => 'sometimes|required|integer',
+            'exchange_limit' => 'sometimes|required|string',
             'status' => 'sometimes|required|in:active,inactive',
-            'pkg_width' => 'required|integer',
-            'pkg_height' => 'required|integer',
-            'pkg_length' => 'required|integer',
-            'pkg_weight' => 'required|integer',
+            'pkg_width' => 'required|string',
+            'pkg_height' => 'required|string',
+            'pkg_length' => 'required|string',
+            'pkg_weight' => 'required|string',
             'shipping_charges' => 'required|string'
         ]);
         if ($validatedData->fails()) {

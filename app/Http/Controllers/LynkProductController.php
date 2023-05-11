@@ -46,7 +46,7 @@ class LynkProductController extends Controller
     {
         $validatedData = Validator::make($request->all(), [
             'url' => 'sometimes|required|url',
-            'exchange_limit' => 'sometimes|required|integer',
+            'exchange_limit' => 'sometimes|required|string',
             'status' => 'sometimes|required|in:active,inactive'
         ]);
         if ($validatedData->fails()) {
