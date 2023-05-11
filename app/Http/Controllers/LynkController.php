@@ -47,7 +47,7 @@ class LynkController extends Controller
         }
         $store_data = $validator->validated();
         $store_data['store_id'] = $store->id;
-        $lynk = Lynk::create();
+        $lynk = Lynk::create($store_data);
         $products = $validator->validated()['products'];
         $index = 0;
         foreach($products as $product) {
