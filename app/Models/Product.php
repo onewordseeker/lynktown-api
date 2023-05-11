@@ -16,6 +16,8 @@ class Product extends Model
         'name',
         'size',
         'exchange_available',
+        'return_available',
+        'categories',
         'status',
         'product_type', // ready-made, custom
     ];

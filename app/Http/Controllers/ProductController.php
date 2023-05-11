@@ -80,7 +80,9 @@ class ProductController extends Controller
             'discount_price' => 'required|string',
             'name' => 'required|string',
             'size' => 'required|string',
-            'exchange_available' => 'required|string',
+            'exchange_available' => 'string',
+            'return_available' => 'string',
+            'categories' => 'string',
             'product_type' => 'required|string',
         ]);
         return $validatedData;
@@ -98,6 +100,8 @@ class ProductController extends Controller
         $create->name = $validatedData->validated()['name'];
         $create->size = $validatedData->validated()['size'];
         $create->exchange_available = $validatedData->validated()['exchange_available'];
+        $create->return_available = $validatedData->validated()['return_available'];
+        $create->categories = $validatedData->validated()['categories'];
         $create->product_type = $validatedData->validated()['product_type'];
 
         // OTP verification enabled.
@@ -130,7 +134,9 @@ class ProductController extends Controller
             'discount_price' => 'required|string',
             'name' => 'required|string',
             'size' => 'required|string',
-            'exchange_available' => 'required|integer',
+            'exchange_available' => 'integer',
+            'return_available' => 'integer',
+            'categories' => 'string',
             'product_type' => 'required|string',
         ]);
         if ($validatedData->fails()) {
@@ -152,6 +158,8 @@ class ProductController extends Controller
         $update->name = $validatedData->validated()['name'];
         $update->size = $validatedData->validated()['size'];
         $update->exchange_available = $validatedData->validated()['exchange_available'];
+        $update->return_available = $validatedData->validated()['return_available'];
+        $update->categories = $validatedData->validated()['categories'];
         $update->product_type = $validatedData->validated()['product_type'];
 
         if(isset($product['images'])) {

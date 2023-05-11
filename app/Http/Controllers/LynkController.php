@@ -33,7 +33,8 @@ class LynkController extends Controller
         $store = vendorStore();
         $this->verifyStoreAction($store->id);
         $validator = Validator::make($request->all(), [
-            'exchange_limit' => 'required|string',
+            'exchange_limit' => 'string',
+            'return_available' => 'string',
             'pkg_width' => 'required|string',
             'pkg_height' => 'required|string',
             'pkg_length' => 'required|string',
@@ -90,7 +91,8 @@ class LynkController extends Controller
         $this->verifyStoreAction($store->id);
         $validatedData = Validator::make($request->all(), [
             'url' => 'sometimes|required|url',
-            'exchange_limit' => 'sometimes|required|string',
+            'exchange_limit' => 'string',
+            'return_available' => 'string',
             'status' => 'sometimes|required|in:active,inactive',
             'pkg_width' => 'required|string',
             'pkg_height' => 'required|string',
