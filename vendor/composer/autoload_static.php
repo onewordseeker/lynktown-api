@@ -128,6 +128,10 @@ class ComposerStaticInit6c01d57b6eee9631a5c7dbd4d116488b
             'Illuminate\\Support\\' => 19,
             'Illuminate\\' => 11,
         ),
+        'H' => 
+        array (
+            'Helper\\' => 7,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\UriTemplate\\' => 23,
@@ -418,6 +422,10 @@ class ComposerStaticInit6c01d57b6eee9631a5c7dbd4d116488b
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate',
         ),
+        'Helper\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/Helper/index.php',
+        ),
         'GuzzleHttp\\UriTemplate\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/uri-template/src',
@@ -517,6 +525,7 @@ class ComposerStaticInit6c01d57b6eee9631a5c7dbd4d116488b
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\LynkController' => __DIR__ . '/../..' . '/app/Http/Controllers/LynkController.php',
         'App\\Http\\Controllers\\LynkProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/LynkProductController.php',
+        'App\\Http\\Controllers\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProductController.php',
         'App\\Http\\Controllers\\StoreController' => __DIR__ . '/../..' . '/app/Http/Controllers/StoreController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
@@ -548,6 +557,7 @@ class ComposerStaticInit6c01d57b6eee9631a5c7dbd4d116488b
         'App\\Models\\OrderRequest' => __DIR__ . '/../..' . '/app/Models/OrderRequest.php',
         'App\\Models\\PhoneVerification' => __DIR__ . '/../..' . '/app/Models/PhoneVerification.php',
         'App\\Models\\Product' => __DIR__ . '/../..' . '/app/Models/Product.php',
+        'App\\Models\\ProductImages' => __DIR__ . '/../..' . '/app/Models/ProductImages.php',
         'App\\Models\\Store' => __DIR__ . '/../..' . '/app/Models/Store.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',

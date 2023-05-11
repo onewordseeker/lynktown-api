@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Store;
 use App\Models\Asset;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class StoreController extends Controller
 {
     //
     function list(Request $request) {
-        $lynks = Store::where(['user_id' => auth()->user()->id])->with(['logo', 'cover'])->get();
+        $this->validateRequst();
+        $store = vendorStore();
+        $lynks = Store::where(['user_id' => Auth()->user()->id])->with(['logo', 'cover'])->first();
         return $this->success([
             $lynks
         ]);
@@ -21,7 +24,6 @@ class StoreController extends Controller
     public function store(Request $request)
     {
         // Validate the request data
-        
         $validatedData = Validator::make($request->all(), [
             'store_logo' => 'required|string',
             'store_header_cover' => 'required|string',
@@ -30,7 +32,6 @@ class StoreController extends Controller
             'store_email' => 'required|email',
             'storephoneno' => 'required|string',
             'category' => 'required|string',
-            'store_uid' => 'required|string',
             'note' => 'nullable|string',
             'accepting_orders' => 'required|boolean',
         ]);
@@ -48,6 +49,7 @@ class StoreController extends Controller
         // Create a new Store model instance
         $store = new Store;
         $store->user_id = auth()->user()->id;
+        $store->store_uid = Str::random(12);
         $store->brand_color = $validatedData->validated()['brand_color'];
         $store->store_address = $validatedData->validated()['store_address'];
         $store->store_email = $validatedData->validated()['store_email'];

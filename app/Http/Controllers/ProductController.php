@@ -8,13 +8,16 @@ use App\Models\CatalogProduct;
 use App\Models\Catalog;
 use App\Models\Asset;
 use App\Models\Store;
+use App\Models\ProductImages;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
      //
      function list(Request $request) {
-        $lynks = Product::where(['store_id' => $request->store_id])->with(['cover'])->get();
+        $this->validateRequst();
+        $store = vendorStore();
+        $lynks = Product::where(['store_id' => $store->id])->with(['cover'])->get();
         return $this->success([
             $lynks
         ]);
@@ -23,6 +26,7 @@ class ProductController extends Controller
     // Create a new store
     public function store(Request $request)
     {
+        $this->validateRequst();
         // Validate the request data
         $validatedData = $this->verifyData($request);
         if ($validatedData->fails()) {
@@ -39,6 +43,8 @@ class ProductController extends Controller
     }
 
     public function addToCatalog(Request $request) {
+        $this->validateRequst();
+
         $store = Store::where(['user_id' => auth()->user()->id])->first();
         if($store) {
             return $this->error('Product could not updated', 401);
@@ -68,8 +74,7 @@ class ProductController extends Controller
 
     public function verifyData($request) {
         $validatedData = Validator::make($request->all(), [
-            'image' => 'required|string',
-            'store_id' => 'required|integer',
+            'images' => 'required|string',
             'quantity' => 'required|integer',
             'price' => 'required|string',
             'discount_price' => 'required|string',
@@ -82,10 +87,11 @@ class ProductController extends Controller
     }
 
     public function create(Request $request,  $validatedData) {
+        $store = vendorStore();
           // Validate the request data
         // Create a new Store model instance
         $create = new Product;
-        $create->store_id = $validatedData->validated()['store_id'];
+        $create->store_id = $store->id;
         $create->quantity = $validatedData->validated()['quantity'];
         $create->price = $validatedData->validated()['price'];
         $create->discount_price = $validatedData->validated()['discount_price'];
@@ -94,17 +100,19 @@ class ProductController extends Controller
         $create->exchange_available = $validatedData->validated()['exchange_available'];
         $create->product_type = $validatedData->validated()['product_type'];
 
-        if($request->file('image')) {
-            // Upload store logo image
-            $storeLogoPath = $request->file('image')->store('uploads');
-            $asset = Asset::create(['url' => $storeLogoPath, 'type' => 'image']);
-            $create->img_id = $asset->id;
-        }
         // OTP verification enabled.
         // $this->OTPMiddleware();
         
         // Save the new Store instance to the database
         $create->save();
+        if(isset($product['images'])) {
+            foreach($product['images'] as $image) {
+                $asset = Asset::create(['url' => $image, 'type' => 'image']);
+                // $product['img_id'] = $asset->id;
+                ProductImages::create(['product_id' => $create->id, 'asset_id' => $asset->id]);
+            }
+            // $storeLogoPath = $request->file('products')[$index]['product_image']->store('uploads');
+        }
         return $create;
     }
 
@@ -117,8 +125,6 @@ class ProductController extends Controller
         }
         // Validate the request data
         $validatedData = Validator::make($request->all(), [
-            'image' => 'required|string',
-            'store_id' => 'required|integer',
             'quantity' => 'required|integer',
             'price' => 'required|string',
             'discount_price' => 'required|string',
@@ -140,7 +146,6 @@ class ProductController extends Controller
         $this->OTPMiddleware(null, $request);
 
         // Create a new Store model instance
-        $update->store_id = $validatedData->validated()['store_id'];
         $update->quantity = $validatedData->validated()['quantity'];
         $update->price = $validatedData->validated()['price'];
         $update->discount_price = $validatedData->validated()['discount_price'];
@@ -149,11 +154,13 @@ class ProductController extends Controller
         $update->exchange_available = $validatedData->validated()['exchange_available'];
         $update->product_type = $validatedData->validated()['product_type'];
 
-        if($request->file('image')) {
-            // Upload store logo image
-            $storeLogoPath = $request->file('image')->store('uploads');
-            $asset = Asset::create(['url' => $storeLogoPath, 'type' => 'image']);
-            $update->img_id = $asset->id;
+        if(isset($product['images'])) {
+            foreach($product['images'] as $image) {
+                $asset = Asset::create(['url' => $image, 'type' => 'image']);
+                // $product['img_id'] = $asset->id;
+                ProductImages::create(['product_id' => $update->id, 'asset_id' => $asset->id]);
+            }
+            // $storeLogoPath = $request->file('products')[$index]['product_image']->store('uploads');
         }
         // Save the new Store instance to the database
         $update->save();

@@ -19,6 +19,8 @@ class LynkController extends Controller
         if($store) {
             return $this->error('You have no store yet. Please create one.', 401);
         }
+        $this->validateRequst();
+        $store = vendorStore();
         $lynks = Lynk::where(['lynks.store_id' => $store->id])->with('products.product')->get();
         return $this->success([
             $lynks
@@ -27,6 +29,9 @@ class LynkController extends Controller
 
     public function store(Request $request)
     {
+        $this->validateRequst();
+        $store = vendorStore();
+        $this->verifyStoreAction($store->id);
         $validator = Validator::make($request->all(), [
             'store_id' => 'required|integer',
             'exchange_limit' => 'required|integer',
@@ -68,6 +73,9 @@ class LynkController extends Controller
 
     public function show($id)
     {
+        $this->validateRequst();
+        $store = vendorStore();
+        $this->verifyStoreAction($store->id);
         $lynk = Lynk::with('products.product')->find($id);
         return $this->success([
             $lynk
@@ -76,7 +84,9 @@ class LynkController extends Controller
 
     public function update(Request $request, $id)
     {
-       
+        $this->validateRequst();
+        $store = vendorStore();
+        $this->verifyStoreAction($store->id);
         $validatedData = Validator::make($request->all(), [
             'url' => 'sometimes|required|url',
             'exchange_limit' => 'sometimes|required|integer',

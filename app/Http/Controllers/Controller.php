@@ -52,6 +52,18 @@ class Controller extends BaseController
                 'data' => []
             ]));
             exit;
+        } else {
+            $store;
+        }
+    }
+    function validateRequst() {
+        if(!isset(Auth()->user()->id)) {
+            print_r(json_encode([
+                'status' => 'Failed',
+                'message' => 'Invalid request',
+                'data' => '1001'
+            ]));
+            exit;
         }
     }
 }
