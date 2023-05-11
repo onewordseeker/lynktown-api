@@ -39,23 +39,22 @@ class StoreController extends Controller
             $message = $validatedData->errors()->first();
             return $this->error($message, 401);
         }
-        $_store = Store::where(['store_uid' => $request->store_uid])->first();
-        if($_store) {
-            return $this->error('Store UID must be unique.', 401);
-        }
+        $store_uid = Str::random(12);
+        do {
+            $_store = Store::where(['store_uid' => $store_uid])->first();
+        } while($_store);
         // OTP verification enabled.
         $this->OTPMiddleware(null, $request);
 
         // Create a new Store model instance
         $store = new Store;
         $store->user_id = auth()->user()->id;
-        $store->store_uid = Str::random(12);
+        $store->store_uid = $store_uid;
         $store->brand_color = $validatedData->validated()['brand_color'];
         $store->store_address = $validatedData->validated()['store_address'];
         $store->store_email = $validatedData->validated()['store_email'];
         $store->storephoneno = $validatedData->validated()['storephoneno'];
         $store->category = $validatedData->validated()['category'];
-        $store->store_uid = $validatedData->validated()['store_uid'];
         $store->note = $validatedData->validated()['note'];
         $store->accepting_orders = $validatedData->validated()['accepting_orders'];
 
