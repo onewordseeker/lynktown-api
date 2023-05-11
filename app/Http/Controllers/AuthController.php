@@ -26,7 +26,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'string|email|unique:users,email',
             'phone_no' => 'required|string|max:255|unique:users,phone_no',
-            'verification_code' => 'integer',
+            'verification_code' => 'string',
             'account_type' => 'required' // vendor,customer,admin
         ]);
         if ($validator->fails()) {

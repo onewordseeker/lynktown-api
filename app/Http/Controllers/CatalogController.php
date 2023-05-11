@@ -22,7 +22,7 @@ class CatalogController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'store_id' => 'required|integer',
+            'store_id' => 'required|string',
             'category' => 'required|string',
         ]);
         if ($validator->fails()) {
@@ -46,7 +46,7 @@ class CatalogController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'store_id' => 'required|integer',
+            'store_id' => 'required|string',
         ]);
         if ($validator->fails()) {
             $message = $validator->errors()->first();

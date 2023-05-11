@@ -20,9 +20,9 @@ class LynkProductController extends Controller
     public function store(Request $request)
     {
         $validatedData = Validator::make($request->all(), [
-            'store_id' => 'required|integer',
+            'store_id' => 'required|string',
             'url' => 'required|url',
-            'exchange_limit' => 'required|integer'
+            'exchange_limit' => 'required|string'
         ]);
         if ($validatedData->fails()) {
             $message = $validatedData->errors()->first();

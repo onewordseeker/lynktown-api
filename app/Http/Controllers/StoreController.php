@@ -33,7 +33,7 @@ class StoreController extends Controller
             'storephoneno' => 'required|string',
             'category' => 'required|string',
             'note' => 'nullable|string',
-            'accepting_orders' => 'required|boolean',
+            'accepting_orders' => 'required',
         ]);
         if ($validatedData->fails()) {
             $message = $validatedData->errors()->first();

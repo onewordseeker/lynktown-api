@@ -75,12 +75,12 @@ class ProductController extends Controller
     public function verifyData($request) {
         $validatedData = Validator::make($request->all(), [
             'images' => 'required|string',
-            'quantity' => 'required|integer',
+            'quantity' => 'required|string',
             'price' => 'required|string',
             'discount_price' => 'required|string',
             'name' => 'required|string',
             'size' => 'required|string',
-            'exchange_available' => 'required|integer',
+            'exchange_available' => 'required|string',
             'product_type' => 'required|string',
         ]);
         return $validatedData;
