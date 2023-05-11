@@ -7,6 +7,7 @@ use App\Models\LynkProduct;
 use App\Models\Lynk;
 use App\Models\Asset;
 use App\Models\Product;
+use App\Models\ProductImages;
 use App\Models\Store;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,13 +46,16 @@ class LynkController extends Controller
         $index = 0;
         foreach($products as $product) {
             $product['store_id'] = $validator->validated()['store_id'];
-            if(isset($product['product_image'])) {
-                // $storeLogoPath = $request->file('products')[$index]['product_image']->store('uploads');
-                $asset = Asset::create(['url' => $product['product_image'], 'type' => 'image']);
-                $product['img_id'] = $asset->id;
-            }
             $p = Product::create($product);
             LynkProduct::create(['lynk_id' => $lynk->id, 'product_id' => $p->id, 'status' => 1, 'note' => $product['note']]);
+            if(isset($product['product_images'])) {
+                foreach($product['product_images'] as $image) {
+                    $asset = Asset::create(['url' => $image, 'type' => 'image']);
+                    // $product['img_id'] = $asset->id;
+                    ProductImages::create(['product_id' => $p->id, 'asset_id' => $asset->id]);
+                }
+                // $storeLogoPath = $request->file('products')[$index]['product_image']->store('uploads');
+            }
             $_products[] = $p;
             $index++;
         }

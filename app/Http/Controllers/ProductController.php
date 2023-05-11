@@ -68,7 +68,7 @@ class ProductController extends Controller
 
     public function verifyData($request) {
         $validatedData = Validator::make($request->all(), [
-            'image' => 'required|image',
+            'image' => 'required|string',
             'store_id' => 'required|integer',
             'quantity' => 'required|integer',
             'price' => 'required|string',
@@ -117,7 +117,7 @@ class ProductController extends Controller
         }
         // Validate the request data
         $validatedData = Validator::make($request->all(), [
-            'image' => 'required|image',
+            'image' => 'required|string',
             'store_id' => 'required|integer',
             'quantity' => 'required|integer',
             'price' => 'required|string',

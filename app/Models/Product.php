@@ -27,4 +27,8 @@ class Product extends Model
     {
         return $this->hasMany(LynkProduct::class);
     }
+    public function productImages()
+    {
+        return $this->hasMany(ProductImages::class);
+    }
 }
