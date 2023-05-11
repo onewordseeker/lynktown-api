@@ -33,7 +33,6 @@ class LynkController extends Controller
         $store = vendorStore();
         $this->verifyStoreAction($store->id);
         $validator = Validator::make($request->all(), [
-            'store_id' => 'required|integer',
             'exchange_limit' => 'required|integer',
             'pkg_width' => 'required|integer',
             'pkg_height' => 'required|integer',
@@ -46,7 +45,9 @@ class LynkController extends Controller
             $message = $validator->errors()->first();
             return $this->error($message, 401);
         }
-        $lynk = Lynk::create($validator->validated());
+        $store_data = $validator->validated();
+        $store_data['store_id'] = $store->id;
+        $lynk = Lynk::create();
         $products = $validator->validated()['products'];
         $index = 0;
         foreach($products as $product) {
