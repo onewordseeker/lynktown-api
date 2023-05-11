@@ -34,6 +34,7 @@ class ComposerStaticInit6c01d57b6eee9631a5c7dbd4d116488b
         'a1cfe24d14977df6878b9bf804af2d1c' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Phpunit/Autoload.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '320163ac6b93aebe3dc25b60a0533d56' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/helpers.php',
+        '577e8babc5e897de9cab73c9a71fdb59' => __DIR__ . '/../..' . '/app/Helper/helper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -127,10 +128,6 @@ class ComposerStaticInit6c01d57b6eee9631a5c7dbd4d116488b
         array (
             'Illuminate\\Support\\' => 19,
             'Illuminate\\' => 11,
-        ),
-        'H' => 
-        array (
-            'Helper\\' => 7,
         ),
         'G' => 
         array (
@@ -421,10 +418,6 @@ class ComposerStaticInit6c01d57b6eee9631a5c7dbd4d116488b
         'Illuminate\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate',
-        ),
-        'Helper\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/App/Helper/index.php',
         ),
         'GuzzleHttp\\UriTemplate\\' => 
         array (
