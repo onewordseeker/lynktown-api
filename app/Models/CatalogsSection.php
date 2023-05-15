@@ -9,5 +9,6 @@ class CatalogsSection extends Model
     protected $fillable = [
         'name',
         'status',
+        'store_id'
     ];
 }

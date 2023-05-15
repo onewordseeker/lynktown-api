@@ -18,9 +18,16 @@ class Product extends Model
         'exchange_available',
         'return_available',
         'categories',
+        'catalog_enabled',
+        'recommended',
+        'new_arrival',
         'status',
         'product_type', // ready-made, custom
     ];
+    public function record()
+    {
+        return $this->hasOne(RecordDetails::class, 'product_id');
+    }
     public function cover()
     {
         return $this->belongsTo(Asset::class, 'img_id');
@@ -29,8 +36,8 @@ class Product extends Model
     {
         return $this->hasMany(LynkProduct::class);
     }
-    public function productImages()
+    public function images()
     {
-        return $this->hasMany(ProductImages::class);
+        return $this->hasMany(ProductImages::class, 'product_id');
     }
 }

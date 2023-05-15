@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\CatalogProduct;
+use App\Models\CatalogSectionProduct;
 use App\Models\Catalog;
 use App\Models\Asset;
 use App\Models\Store;
 use App\Models\ProductImages;
+use App\Models\RecordDetails;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -41,14 +43,7 @@ class ProductController extends Controller
             $result
         ], 'Product was created successfully');
     }
-
-    public function addToCatalog(Request $request) {
-        $this->validateRequst();
-
-        $store = Store::where(['user_id' => auth()->user()->id])->first();
-        if($store) {
-            return $this->error('Product could not updated', 401);
-        }
+    public function createCatalogProduct(Request $request) {
         $validatedData = $this->verifyData($request);
         if ($validatedData->fails()) {
             $message = $validatedData->errors()->first();
@@ -67,9 +62,45 @@ class ProductController extends Controller
             'product_id' => $product->id,
             'status' => 1
         ]);
+    }
+    public function addToCatalog(Request $request) {
+        $this->validateRequst();
+        $store = Store::where(['user_id' => auth()->user()->id])->first();
+        if(!$store) {
+            return $this->error('Product could not updated 1', 401);
+        }
+        if(!$request->product_ids) {
+            return $this->error('Product could not updated 2', 401);
+        }
+        $ids = $request->product_ids;
+        $flag = false;
+        foreach($ids as $id) {
+            $product = Product::find($id);
+            if($product) {
+                $product->catalog_enabled = 1;
+                $product->new_arrival = $request->new_arrival ? 1 : 0;
+                $product->recommended = $request->recommended ? 1 : 0;
+                $product->save();
+                if($request->new_sections) {
+                    $n_ids = $request->new_sections;
+                    foreach($n_ids as $nid) {
+                        CatalogSectionProduct::create([
+                            'section_id' => $nid,
+                            'product_id' => $id,
+                        ]);
+                    }
+                }
+            } else {
+                $flag = true;
+            }
+        }
+        $message = 'Products were added to catalog successfully';
+        if($flag) {
+            $message = 'Some Products could not added to catalog.';
+        }
         return $this->success([
-            $product
-        ], 'Product was created successfully');
+            []
+        ], $message);
     }
 
     public function verifyData($request) {
@@ -117,6 +148,7 @@ class ProductController extends Controller
             }
             // $storeLogoPath = $request->file('products')[$index]['product_image']->store('uploads');
         }
+        RecordDetails::create(['product_id' => $create->id]);
         return $create;
     }
 

@@ -36,14 +36,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/lynk/list', [LynkController::class, 'list']);
     Route::post('/lynk/create', [LynkController::class, 'store']);
     Route::post('/lynk/single/{id}', [LynkController::class, 'show']);
-    Route::post('/lynk/update/{id}', [LynkController::class, 'update']);
+    Route::post('/lynk/update', [LynkController::class, 'update']);
     
     // Store Routes
     Route::post('/store/list', [StoreController::class, 'list']);
     Route::post('/store/create', [StoreController::class, 'store']);
-    Route::post('/store/single/{id}', [StoreController::class, 'show']);
-    Route::post('/store/stats/{id}', [StoreController::class, 'stats']);
-    Route::post('/store/update/{id}', [StoreController::class, 'update']);
+    Route::post('/store/single', [StoreController::class, 'show']);
+    Route::post('/store/stats', [StoreController::class, 'stats']);
+    Route::post('/store/update', [StoreController::class, 'update']);
+    Route::post('/section/create', [StoreController::class, 'sectionCreate']);
+    Route::post('/section/list', [StoreController::class, 'sectionList']);
+    Route::post('dashboard/details', [StoreController::class, 'details']);
     
     // Products
     Route::post('/product/list', [ProductController::class, 'list']);

@@ -14,7 +14,6 @@ class CatalogSectionProduct extends Model
     protected $fillable = [
         'product_id',
         'section_id',
-        'catalog_id',
         'status',
     ];
 
@@ -26,10 +25,5 @@ class CatalogSectionProduct extends Model
     public function section()
     {
         return $this->belongsTo(CatalogSection::class);
-    }
-
-    public function catalog()
-    {
-        return $this->belongsTo(Catalog::class);
     }
 }

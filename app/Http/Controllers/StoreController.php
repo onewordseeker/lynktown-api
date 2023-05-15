@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Store;
 use App\Models\Asset;
+use App\Models\CatalogSectionProduct;
+use App\Models\Lynk;
+use App\Models\CatalogsSection;
+use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -14,7 +18,7 @@ class StoreController extends Controller
     function list(Request $request) {
         $this->validateRequst();
         $store = vendorStore();
-        $lynks = Store::where(['user_id' => Auth()->user()->id])->with(['logo', 'cover'])->first();
+        $lynks = Store::where(['user_id' => Auth()->user()->id])->with(['user', 'logo', 'cover'])->first();
         return $this->success([
             $lynks
         ]);
@@ -25,16 +29,35 @@ class StoreController extends Controller
     {
         // Validate the request data
         $validatedData = Validator::make($request->all(), [
-            'store_logo' => 'required|string',
-            'store_header_cover' => 'required|string',
-            'brand_color' => 'required|string',
-            'store_address' => 'required|string',
-            'store_email' => 'required|email',
-            'storephoneno' => 'required|string',
-            'category' => 'required|string',
+            'store_logo' => 'string',
+            'store_header_cover' => 'string',
+            'brand_color' => 'string',
+            'store_email' => 'email',
+            'storephoneno' => 'string',
+            'category' => 'string',
             'note' => 'nullable|string',
-            'accepting_orders' => 'required',
+            'accepting_orders' => '',
+            'user_id' => 'nullable|string',
+            'business_name' => 'nullable|string',
+            'whatsapp' => 'nullable|string',
+            'website' => 'nullable|string',
+            'instagram' => 'nullable',
+            'gst_id' => 'nullable',
+            'bankaccno' => 'nullable',
+            'holder_name' => 'nullable',
+            'ifsc_code' => 'nullable',
+            'bank_name' => 'nullable',
+            'branch' => 'nullable',
+            'pancardno' => 'nullable',
+            'house_no' => 'nullable',
+            'store_address' => 'nullable',
+            'city' => 'nullable',
+            'pincode' => 'nullable',
+            'state' => 'nullable',
+            'locality' => 'nullable',
+            'brand_color' => 'nullable',
         ]);
+        
         if ($validatedData->fails()) {
             $message = $validatedData->errors()->first();
             return $this->error($message, 401);
@@ -44,38 +67,31 @@ class StoreController extends Controller
             $_store = Store::where(['store_uid' => $store_uid])->first();
         } while($_store);
         // OTP verification enabled.
-        $this->OTPMiddleware(null, $request);
+        // $this->OTPMiddleware(null, $request);
 
         // Create a new Store model instance
         $store = new Store;
         $store->user_id = auth()->user()->id;
         $store->store_uid = $store_uid;
-        $store->brand_color = $validatedData->validated()['brand_color'];
-        $store->store_address = $validatedData->validated()['store_address'];
-        $store->store_email = $validatedData->validated()['store_email'];
-        $store->storephoneno = $validatedData->validated()['storephoneno'];
-        $store->category = $validatedData->validated()['category'];
-        $store->note = $validatedData->validated()['note'];
-        $store->accepting_orders = $validatedData->validated()['accepting_orders'];
-
+        
+        foreach($validatedData->validated() as $key => $value) {
+            if(($key == 'store_logo') || $key == 'store_header_cover')
+            continue;
+            $store->$key = $value;
+        }
         // Upload store logo image
         if(isset($request->store_logo)) {
             // $storeLogoPath = $request->file('store_logo')->store('uploads');
             $asset = Asset::create(['url' => $request->store_logo, 'type' => 'image']);
-            $product['img_id'] = $asset->id;
             $store->store_logo = $asset->id;
         }
         if(isset($request->store_header_cover)) {
             // $storeLogoPath = $request->file('store_logo')->store('uploads');
             $asset = Asset::create(['url' => $request->store_header_cover, 'type' => 'image']);
-            $product['img_id'] = $asset->id;
             $store->store_header_cover = $asset->id;
         }
         // Upload store header cover image
-        // $storeHeaderCoverPath = $request->file('store_header_cover')->store('uploads');
-        // $cover = Asset::create(['url' => $storeHeaderCoverPath, 'type' => 'image']);
-        // $store->store_header_cover = $cover->id;
-
+ 
         // Save the new Store instance to the database
         $store->save();
         return $this->success([
@@ -84,19 +100,42 @@ class StoreController extends Controller
     }
 
     // Update an existing store
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $this->validateRequst();
+        $store = vendorStore();
+        if(!$store) {
+            return $this->store($request);
+        }
         // Validate the request data
         $validatedData = Validator::make($request->all(), [
-            'store_logo' => 'image',
-            'store_header_cover' => 'image',
-            'brand_color' => 'required|string',
-            'store_address' => 'required|string',
-            'store_email' => 'required|email',
-            'storephoneno' => 'required|string',
-            'category' => 'required|string',
+            'store_logo' => 'nullable|string',
+            'store_header_cover' => 'nullable|string',
+            'brand_color' => 'nullable|string',
+            'store_email' => 'nullable|email',
+            'storephoneno' => 'nullable|string',
+            'category' => 'nullable|string',
             'note' => 'nullable|string',
-            'accepting_orders' => 'required|boolean',
+            'accepting_orders' => 'nullable',
+            'user_id' => 'nullable|string',
+            'business_name' => 'nullable|string',
+            'whatsapp' => 'nullable|string',
+            'website' => 'nullable|string',
+            'instagram' => 'nullable',
+            'gst_id' => 'nullable',
+            'bankaccno' => 'nullable',
+            'holder_name' => 'nullable',
+            'ifsc_code' => 'nullable',
+            'bank_name' => 'nullable',
+            'branch' => 'nullable',
+            'pancardno' => 'nullable',
+            'house_no' => 'nullable',
+            'store_address' => 'nullable',
+            'city' => 'nullable',
+            'pincode' => 'nullable',
+            'state' => 'nullable',
+            'locality' => 'nullable',
+            'brand_color' => 'nullable',
         ]);
         if ($validatedData->fails()) {
             $message = $validatedData->errors()->first();
@@ -104,26 +143,26 @@ class StoreController extends Controller
         }
 
         // OTP verification enabled.
-        $this->OTPMiddleware(null, $request);
+        // $this->OTPMiddleware(null, $request);
 
         // Create a new Store model instance
-        $store = Store::find($id);
-        $store->brand_color = $validatedData['brand_color'];
-        $store->store_address = $validatedData['store_address'];
-        $store->store_email = $validatedData['store_email'];
-        $store->storephoneno = $validatedData['storephoneno'];
-        $store->category = $validatedData['category'];
-        $store->note = $validatedData['note'];
-        $store->accepting_orders = $validatedData['accepting_orders'];
-        if($request->file('store_logo')) {
-            // Upload store logo image
-            $storeLogoPath = $request->file('store_logo')->store('store_logos');
-            $store->store_logo = $storeLogoPath;
+        $store = Store::find($store->id);
+        
+        foreach($validatedData->validated() as $key => $value) {
+            if(($key == 'store_logo') || $key == 'store_header_cover')
+            continue;
+            $store->$key = $value;
         }
-        if($request->file('store_header_cover')) {
-            // Upload store header cover image
-            $storeHeaderCoverPath = $request->file('store_header_cover')->store('store_header_covers');
-            $store->store_header_cover = $storeHeaderCoverPath;
+        // Upload store logo image
+        if(isset($request->store_logo)) {
+            // $storeLogoPath = $request->file('store_logo')->store('uploads');
+            $asset = Asset::create(['url' => $request->store_logo, 'type' => 'image']);
+            $store->store_logo = $asset->id;
+        }
+        if(isset($request->store_header_cover)) {
+            // $storeLogoPath = $request->file('store_logo')->store('uploads');
+            $asset = Asset::create(['url' => $request->store_header_cover, 'type' => 'image']);
+            $store->store_header_cover = $asset->id;
         }
         // Save the new Store instance to the database
         $store->save();
@@ -133,21 +172,69 @@ class StoreController extends Controller
     }
 
     // Get a single store by ID
-    public function show($id)
+    public function show(Request $request)
     {
-        $store = Store::with(['logo', 'cover'])->find($id);
+        $this->validateRequst();
+        $store = vendorStore();
+        if(!$store) {
+            return $this->error('Please complete your business profile.', 401);
+        }
+        $store = Store::with(['user', 'logo', 'cover'])->find($store->id);
         return $this->success([
             $store
         ]);
     }
 
-    public function stats($id)
+    public function details()
     {
-        $store = Store::with(['catalogs'])->find($id);
+        $this->validateRequst();
+        $store = vendorStore();
+        $lynks = Lynk::where(['lynks.store_id' => $store->id ])->with(['products.product.record', 'record', 'products.product.images.productImage'])->get();
+        $_lynks = [];
+        $_lynks['store'] = $store;
+        $_lynks['lynks'] = $lynks;
         return $this->success([
-            $store
+            $_lynks
         ]);
     }
 
-    
+    public function sectionCreate(Request $request) {
+        $this->validateRequst();
+        $store = vendorStore();
+        if(!$store) {
+            return $this->error('Please complete your business profile.', 401);
+        }
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'nullable|string',
+        ]);
+        if ($validatedData->fails()) {
+            $message = $validatedData->errors()->first();
+            return $this->error($message, 401);
+        }
+        $section = CatalogsSection::create(['store_id' => $store->id, 'name' => $validatedData->validated()['name']]);
+        return $this->success([
+            $section
+        ], 'Section created successfully');
+    }
+
+    public function sectionList(Request $request) {
+        $this->validateRequst();
+        $store = vendorStore();
+        if(!$store) {
+            return $this->error('Please complete your business profile.', 401);
+        }
+        $products = [];
+        $_sections = CatalogsSection::where(['catalogs_sections.store_id' =>$store->id])->get();
+        $sections = [];
+        $index = 0;
+        foreach($_sections as $section) {
+            $products = CatalogSectionProduct::where(['section_id' => $section->id])->get();
+            $sections[] = $section;
+            $sections[$index]->products = $products;
+            $index++;
+        }
+        return $this->success([
+            $sections
+        ], 'Section list');
+    }
 }

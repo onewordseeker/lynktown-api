@@ -10,6 +10,10 @@ class Store extends Model
         'user_id', 'store_logo', 'store_header_cover', 'brand_color', 'store_address',
         'store_email', 'storephoneno', 'category', 'status', 'note', 'accepting_orders', 'deleted'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
     public function logo()
     {
         return $this->belongsTo(Asset::class, 'store_logo');

@@ -9,6 +9,7 @@ use App\Models\Asset;
 use App\Models\Product;
 use App\Models\ProductImages;
 use App\Models\Store;
+use App\Models\RecordDetails;
 use Illuminate\Support\Facades\Validator;
 
 class LynkController extends Controller
@@ -21,7 +22,7 @@ class LynkController extends Controller
         }
         $this->validateRequst();
         $store = vendorStore();
-        $lynks = Lynk::where(['lynks.store_id' => $store->id])->with('products.product')->get();
+        $lynks = Lynk::where(['lynks.store_id' => $store->id ])->with(['products.product.record', 'record', 'products.product.images.productImage'])->get();
         return $this->success([
             $lynks
         ]);
@@ -35,11 +36,11 @@ class LynkController extends Controller
         $validator = Validator::make($request->all(), [
             'exchange_limit' => 'string',
             'return_available' => 'string',
-            'pkg_width' => 'required|string',
-            'pkg_height' => 'required|string',
-            'pkg_length' => 'required|string',
-            'pkg_weight' => 'required|string',
-            'shipping_charges' => 'required|string',
+            'pkg_width' => 'nullable|string',
+            'pkg_height' => 'nullable|string',
+            'pkg_length' => 'nullable|string',
+            'pkg_weight' => 'nullable|string',
+            'shipping_charges' => 'nullable|string',
             'products' => 'required'
         ]);
         if ($validator->fails()) {
@@ -54,6 +55,7 @@ class LynkController extends Controller
         foreach($products as $product) {
             $product['store_id'] = $store_data['store_id'];
             $p = Product::create($product);
+            RecordDetails::create(['product_id' => $p->id]);
             LynkProduct::create(['lynk_id' => $lynk->id, 'product_id' => $p->id, 'status' => 1]);
             if(isset($product['product_images'])) {
                 foreach($product['product_images'] as $image) {
@@ -66,6 +68,7 @@ class LynkController extends Controller
             $_products[] = $p;
             $index++;
         }
+        RecordDetails::create(['lynk_id' => $lynk->id]);
         // $validator->validated()['products']
         $lynk->products = $_products;
         return $this->success([
@@ -84,27 +87,28 @@ class LynkController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $this->validateRequst();
         $store = vendorStore();
         $this->verifyStoreAction($store->id);
         $validatedData = Validator::make($request->all(), [
-            'url' => 'sometimes|required|url',
+            'url' => 'sometimes|nullable|url',
             'exchange_limit' => 'string',
             'return_available' => 'string',
-            'status' => 'sometimes|required|in:active,inactive',
-            'pkg_width' => 'required|string',
-            'pkg_height' => 'required|string',
-            'pkg_length' => 'required|string',
-            'pkg_weight' => 'required|string',
-            'shipping_charges' => 'required|string'
+            'status' => 'sometimes|nullable',
+            'pkg_width' => 'nullable|string',
+            'pkg_height' => 'nullable|string',
+            'pkg_length' => 'nullable|string',
+            'pkg_weight' => 'nullable|string',
+            'shipping_charges' => 'nullable|string',
+            'id' => 'required'
         ]);
         if ($validatedData->fails()) {
             $message = $validatedData->errors()->first();
             return $this->error($message, 401);
         }
-        $lynk = Lynk::find($id);
+        $lynk = Lynk::find($request->id);
         $lynk->update($validatedData->validated());
         return response()->json($lynk);
     }
