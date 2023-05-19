@@ -32,4 +32,12 @@ class Lynk extends Model
     {
         return $this->hasOne(RecordDetails::class, 'lynk_id');
     }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+    public function wishlist()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

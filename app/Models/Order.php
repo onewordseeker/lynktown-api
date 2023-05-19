@@ -11,4 +11,19 @@ class Order extends Model
         'shipping_address', 'shipping_charges', 'order_start_date', 'customer_name', 'phone_no',
         'note', 'status'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
+
+    public function lynk()
+    {
+        return $this->belongsTo(Lynk::class);
+    }
 }

@@ -78,7 +78,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::prefix('/customer')->controller(CustomerController::class)->group(function () {
         Route::post('/feed', 'feed');
-        Route::post('/togglewishlist', 'toggleWishlist');
         Route::post('/lynk/{id}', 'lynk_products');
+        Route::post('/createorder', 'createOrder');
+        Route::post('/followstore', 'toggleFollow');
+        Route::post('/togglewishlist', 'toggleWishlist');
+        Route::post('/accessstore/{id}', 'accessStore');
     });
 });

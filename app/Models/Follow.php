@@ -4,20 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Wishlist extends Model
+class Follow extends Model
 {
-    protected $table = 'wishlist';
-
-    protected $fillable = ['user_id', 'lynk_id', 'store_id'];
+    protected $fillable = [
+        'user_id',
+        'store_id',
+    ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function lynk()
-    {
-        return $this->belongsTo(Lynk::class);
     }
 
     public function store()

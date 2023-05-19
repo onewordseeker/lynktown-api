@@ -32,6 +32,10 @@ class Product extends Model
     {
         return $this->belongsTo(Asset::class, 'img_id');
     }
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id');
+    }
     public function LynkProducts()
     {
         return $this->hasMany(LynkProduct::class);

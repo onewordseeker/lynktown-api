@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 19, 2023 at 01:07 PM
+-- Generation Time: May 19, 2023 at 07:01 PM
 -- Server version: 8.0.31
--- PHP Version: 7.4.33
+-- PHP Version: 8.0.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -295,6 +295,31 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `follows`
+--
+
+DROP TABLE IF EXISTS `follows`;
+CREATE TABLE IF NOT EXISTS `follows` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `store_id` bigint UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `follows_user_id_foreign` (`user_id`),
+  KEY `follows_store_id_foreign` (`store_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `follows`
+--
+
+INSERT INTO `follows` (`id`, `user_id`, `store_id`, `created_at`, `updated_at`) VALUES
+(5, 10, 10, '2023-05-19 14:00:32', '2023-05-19 14:00:32');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `login_activity`
 --
 
@@ -517,7 +542,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -566,7 +591,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (40, '2023_05_05_214000_create_phone_verifications_table', 2),
 (41, '2023_05_07_102752_add_store_id_to_catalogs_table', 3),
 (42, '2023_05_11_105521_create_product_images_table', 4),
-(44, '2023_05_19_120653_create_wishlist_table', 5);
+(45, '2023_05_19_120653_create_wishlist_table', 5),
+(46, '2023_05_19_183854_create_follows_table', 6);
 
 -- --------------------------------------------------------
 
@@ -721,7 +747,7 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `personal_access_tokens`
@@ -754,7 +780,9 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (31, 'App\\Models\\User', 9, 'API Token', 'bcafbc6d0f6e9cf636abb0ff546be6f5b12cb3d1d775e3b3f0e15bcd198b3829', '[\"*\"]', '2023-05-17 20:55:28', NULL, '2023-05-17 20:50:22', '2023-05-17 20:55:28'),
 (32, 'App\\Models\\User', 9, 'API Token', 'eb326cb823477289003273e37fc735fee638238eaad478765d692bbacd94bd32', '[\"*\"]', '2023-05-17 20:56:52', NULL, '2023-05-17 20:56:04', '2023-05-17 20:56:52'),
 (33, 'App\\Models\\User', 9, 'API Token', '8a249d2060177b98ea53de4623a2c49b1eaa7cd2fd5d9d61927128388481c6b1', '[\"*\"]', '2023-05-18 09:03:32', NULL, '2023-05-17 20:57:21', '2023-05-18 09:03:32'),
-(34, 'App\\Models\\User', 10, 'API Token', '6bd90d39d57e0352e6bbb7e5d459381766bda9235675fcb01a86d3dfcdca4d64', '[\"*\"]', '2023-05-19 08:07:12', NULL, '2023-05-19 08:06:29', '2023-05-19 08:07:12');
+(34, 'App\\Models\\User', 10, 'API Token', '6bd90d39d57e0352e6bbb7e5d459381766bda9235675fcb01a86d3dfcdca4d64', '[\"*\"]', '2023-05-19 08:07:12', NULL, '2023-05-19 08:06:29', '2023-05-19 08:07:12'),
+(35, 'App\\Models\\User', 10, 'API Token', '069e593085089c87dfae5c860a80ff5a45c0663da3e7336f299b1d33ef9d02a8', '[\"*\"]', '2023-05-19 13:30:52', NULL, '2023-05-19 13:02:58', '2023-05-19 13:30:52'),
+(36, 'App\\Models\\User', 10, 'API Token', '81bbbc58e1c91daefec90adbbeeb83272db9b26af03eefb70fe3f9dc6c8c45e5', '[\"*\"]', '2023-05-19 14:00:32', NULL, '2023-05-19 13:54:22', '2023-05-19 14:00:32');
 
 -- --------------------------------------------------------
 
@@ -771,7 +799,7 @@ CREATE TABLE IF NOT EXISTS `phone_verifications` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `phone_verifications`
@@ -813,7 +841,9 @@ INSERT INTO `phone_verifications` (`id`, `phone_no`, `otp_code`, `is_expired`, `
 (33, '1234567890', '012690', 1, '2023-05-17 20:56:19', '2023-05-17 20:56:52'),
 (34, '1234567890', '128234', 1, '2023-05-17 20:57:15', '2023-05-17 20:57:21'),
 (35, '2', '186961', 1, '2023-05-19 08:04:30', '2023-05-19 08:04:38'),
-(36, '2', '588958', 1, '2023-05-19 08:06:16', '2023-05-19 08:06:29');
+(36, '2', '588958', 1, '2023-05-19 08:06:16', '2023-05-19 08:06:29'),
+(37, '2', '821369', 1, '2023-05-19 13:02:50', '2023-05-19 13:02:58'),
+(38, '2', '197883', 1, '2023-05-19 13:54:15', '2023-05-19 13:54:22');
 
 -- --------------------------------------------------------
 
@@ -1213,7 +1243,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `account_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `account_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `users_photo_asset_id_foreign` (`photo_asset_id`),
@@ -1226,7 +1256,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `phone_no`, `photo_asset_id`, `cover_photo_asset_id`, `verification_code`, `is_deleted`, `remember_token`, `created_at`, `updated_at`, `account_type`) VALUES
 (9, NULL, 'itsdisposable008@gmail.com', NULL, '$2y$10$WsOLDSIoYZaTs43hb.ZU2OoJy8ZXKJlIU61I4c7nAx/t49CDUEWyS', '1234567890', NULL, NULL, NULL, 0, '0JeLU0oH5wdyDBjKGryh4X0av6G4MOtKDUE6E2xYIOx2f6Z7Ecem07m2tXk4VR2M', '2023-05-12 08:07:52', '2023-05-17 20:57:21', ''),
-(10, NULL, 'test@email.com', NULL, '$2y$10$cv02zf54APStCEnusyU2IOHbBejKgOeGpx638qrFgej.hySdiyh96', '2', NULL, NULL, NULL, 0, NULL, '2023-05-19 08:06:29', '2023-05-19 08:06:29', 'customer');
+(10, NULL, 'test@email.com', NULL, '$2y$10$cv02zf54APStCEnusyU2IOHbBejKgOeGpx638qrFgej.hySdiyh96', '2', NULL, NULL, NULL, 0, '765Baup0BiszBmL6D5jhff52BS4xTGHGaTzMkJ9BqJytSw4mtTQF7881JtobSEIh', '2023-05-19 08:06:29', '2023-05-19 13:54:22', 'customer');
 
 -- --------------------------------------------------------
 
@@ -1239,12 +1269,21 @@ CREATE TABLE IF NOT EXISTS `wishlist` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint UNSIGNED NOT NULL,
   `lynk_id` bigint UNSIGNED NOT NULL,
+  `store_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `wishlist_user_id_foreign` (`user_id`),
-  KEY `wishlist_lynk_id_foreign` (`lynk_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `wishlist_lynk_id_foreign` (`lynk_id`),
+  KEY `wishlist_store_id_foreign` (`store_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `wishlist`
+--
+
+INSERT INTO `wishlist` (`id`, `user_id`, `lynk_id`, `store_id`, `created_at`, `updated_at`) VALUES
+(2, 10, 93, 10, '2023-05-19 13:03:30', '2023-05-19 13:03:30');
 
 --
 -- Constraints for dumped tables

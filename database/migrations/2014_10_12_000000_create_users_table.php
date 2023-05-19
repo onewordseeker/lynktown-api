@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('photo_asset_id')->nullable()->unsigned();
             $table->integer('cover_photo_asset_id')->nullable()->unsigned();
             $table->integer('is_deleted')->default(0);
-            $table->integer('account_type');
+            $table->string('account_type');
             $table->text('verification_code')->nullable();
             $table->rememberToken();
             $table->timestamps();
