@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('lynks', function (Blueprint $table) {
             //
-            $table->foreign('customer_id')->references('id')->on('users')->onDelete('RESTRICT');
+            // $table->foreign('customer_id')->references('id')->on('users')->onDelete('RESTRICT');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('RESTRICT');
         });
     }

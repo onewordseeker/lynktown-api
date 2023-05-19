@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name',200)->nullable();
+            $table->string('name', 200)->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('photo_asset_id')->nullable()->unsigned();
             $table->integer('cover_photo_asset_id')->nullable()->unsigned();
             $table->integer('is_deleted')->default(0);
+            $table->integer('account_type');
             $table->text('verification_code')->nullable();
             $table->rememberToken();
             $table->timestamps();

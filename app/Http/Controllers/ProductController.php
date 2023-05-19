@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-     //
-     function list(Request $request) {
-        $this->validateRequst();
+    //
+    function list(Request $request)
+    {
+        $this->validateRequest();
         $store = vendorStore();
         $lynks = Product::where(['store_id' => $store->id])->with(['cover'])->get();
         return $this->success([
@@ -28,7 +29,7 @@ class ProductController extends Controller
     // Create a new store
     public function store(Request $request)
     {
-        $this->validateRequst();
+        $this->validateRequest();
         // Validate the request data
         $validatedData = $this->verifyData($request);
         if ($validatedData->fails()) {
@@ -36,25 +37,26 @@ class ProductController extends Controller
             return $this->error($message, 401);
         }
         $result = $this->create($request, $validatedData);
-        if(!$result) {
+        if (!$result) {
             return $this->error('Product could not created', 401);
         }
         return $this->success([
             $result
         ], 'Product was created successfully');
     }
-    public function createCatalogProduct(Request $request) {
+    public function createCatalogProduct(Request $request)
+    {
         $validatedData = $this->verifyData($request);
         if ($validatedData->fails()) {
             $message = $validatedData->errors()->first();
             return $this->error($message, 401);
         }
         $c_p = Catalog::where(['id' => $request->catalog_id])->first();
-        if(!$c_p) {
+        if (!$c_p) {
             return $this->error('Invalid catalog selected', 401);
         }
         $product = $this->create($request, $validatedData);
-        if(!$product) {
+        if (!$product) {
             return $this->error('Product could not created', 401);
         }
         CatalogProduct::create([
@@ -63,27 +65,28 @@ class ProductController extends Controller
             'status' => 1
         ]);
     }
-    public function addToCatalog(Request $request) {
-        $this->validateRequst();
+    public function addToCatalog(Request $request)
+    {
+        $this->validateRequest();
         $store = Store::where(['user_id' => auth()->user()->id])->first();
-        if(!$store) {
+        if (!$store) {
             return $this->error('Product could not updated 1', 401);
         }
-        if(!$request->product_ids) {
+        if (!$request->product_ids) {
             return $this->error('Product could not updated 2', 401);
         }
         $ids = $request->product_ids;
         $flag = false;
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $product = Product::find($id);
-            if($product) {
+            if ($product) {
                 $product->catalog_enabled = 1;
                 $product->new_arrival = $request->new_arrival ? 1 : 0;
                 $product->recommended = $request->recommended ? 1 : 0;
                 $product->save();
-                if($request->new_sections) {
+                if ($request->new_sections) {
                     $n_ids = $request->new_sections;
-                    foreach($n_ids as $nid) {
+                    foreach ($n_ids as $nid) {
                         CatalogSectionProduct::create([
                             'section_id' => $nid,
                             'product_id' => $id,
@@ -95,7 +98,7 @@ class ProductController extends Controller
             }
         }
         $message = 'Products were added to catalog successfully';
-        if($flag) {
+        if ($flag) {
             $message = 'Some Products could not added to catalog.';
         }
         return $this->success([
@@ -103,7 +106,8 @@ class ProductController extends Controller
         ], $message);
     }
 
-    public function verifyData($request) {
+    public function verifyData($request)
+    {
         $validatedData = Validator::make($request->all(), [
             'images' => 'required|string',
             'quantity' => 'required|string',
@@ -119,9 +123,10 @@ class ProductController extends Controller
         return $validatedData;
     }
 
-    public function create(Request $request,  $validatedData) {
+    public function create(Request $request,  $validatedData)
+    {
         $store = vendorStore();
-          // Validate the request data
+        // Validate the request data
         // Create a new Store model instance
         $create = new Product;
         $create->store_id = $store->id;
@@ -137,11 +142,11 @@ class ProductController extends Controller
 
         // OTP verification enabled.
         // $this->OTPMiddleware();
-        
+
         // Save the new Store instance to the database
         $create->save();
-        if(isset($product['images'])) {
-            foreach($product['images'] as $image) {
+        if (isset($product['images'])) {
+            foreach ($product['images'] as $image) {
                 $asset = Asset::create(['url' => $image, 'type' => 'image']);
                 // $product['img_id'] = $asset->id;
                 ProductImages::create(['product_id' => $create->id, 'asset_id' => $asset->id]);
@@ -156,7 +161,7 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $store = Store::where(['user_id' => auth()->user()->id])->first();
-        if($store) {
+        if ($store) {
             return $this->error('Product could not updated', 401);
         }
         // Validate the request data
@@ -176,7 +181,7 @@ class ProductController extends Controller
             return $this->error($message, 401);
         }
         $update = Product::find($validatedData->validated()['store_id']);
-        if(!$update) {
+        if (!$update) {
             return $this->error('Invalid store selected', 401);
         }
 
@@ -194,8 +199,8 @@ class ProductController extends Controller
         $update->categories = $validatedData->validated()['categories'];
         $update->product_type = $validatedData->validated()['product_type'];
 
-        if(isset($product['images'])) {
-            foreach($product['images'] as $image) {
+        if (isset($product['images'])) {
+            foreach ($product['images'] as $image) {
                 $asset = Asset::create(['url' => $image, 'type' => 'image']);
                 // $product['img_id'] = $asset->id;
                 ProductImages::create(['product_id' => $update->id, 'asset_id' => $asset->id]);
@@ -217,17 +222,18 @@ class ProductController extends Controller
             $store
         ]);
     }
-    
-    public function deleteFromCatalog(Request $request) {
+
+    public function deleteFromCatalog(Request $request)
+    {
         $store = Store::where(['user_id' => auth()->user()->id])->first();
-        if($store) {
+        if ($store) {
             return $this->error('Product could not removed', 401);
         }
         $product = CatalogProduct::where(['product_id' => $request->product_id, 'store_id' => $store->store_id])->get();
-        if($product) {
+        if ($product) {
             $product->each->delete();
             return $this->success([
-               Product::where(['store_id' => $request->store_id])->with(['cover'])->get()
+                Product::where(['store_id' => $request->store_id])->with(['cover'])->get()
             ], 'Product removed from catalog');
         } else {
             return $this->error('Product could not removed', 401);

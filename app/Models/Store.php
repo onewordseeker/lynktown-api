@@ -26,4 +26,8 @@ class Store extends Model
     {
         return $this->hasMany(Catalog::class, 'store_id');
     }
+    public function lynks()
+    {
+        return $this->hasMany(Lynk::class, 'store_id');
+    }
 }

@@ -15,14 +15,15 @@ use Illuminate\Support\Facades\Validator;
 class LynkController extends Controller
 {
     //
-    function list(Request $request) {
+    function list(Request $request)
+    {
         $store = Store::where(['user_id' => auth()->user()->id])->first();
-        if(!$store) {
+        if (!$store) {
             return $this->error('You have no store yet. Please create one.', 401);
         }
-        $this->validateRequst();
+        $this->validateRequest();
         $store = vendorStore();
-        $lynks = Lynk::where(['lynks.store_id' => $store->id ])->with(['products.product.record', 'record', 'products.product.images.productImage'])->get();
+        $lynks = Lynk::where(['lynks.store_id' => $store->id])->with(['products.product.record', 'record', 'products.product.images.productImage'])->get();
         return $this->success([
             $lynks
         ]);
@@ -30,7 +31,7 @@ class LynkController extends Controller
 
     public function store(Request $request)
     {
-        $this->validateRequst();
+        $this->validateRequest();
         $store = vendorStore();
         $this->verifyStoreAction($store->id);
         $validator = Validator::make($request->all(), [
@@ -52,13 +53,13 @@ class LynkController extends Controller
         $lynk = Lynk::create($store_data);
         $products = $validator->validated()['products'];
         $index = 0;
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $product['store_id'] = $store_data['store_id'];
             $p = Product::create($product);
             RecordDetails::create(['product_id' => $p->id]);
             LynkProduct::create(['lynk_id' => $lynk->id, 'product_id' => $p->id, 'status' => 1]);
-            if(isset($product['product_images'])) {
-                foreach($product['product_images'] as $image) {
+            if (isset($product['product_images'])) {
+                foreach ($product['product_images'] as $image) {
                     $asset = Asset::create(['url' => $image, 'type' => 'image']);
                     // $product['img_id'] = $asset->id;
                     ProductImages::create(['product_id' => $p->id, 'asset_id' => $asset->id]);
@@ -78,7 +79,7 @@ class LynkController extends Controller
 
     public function show($id)
     {
-        $this->validateRequst();
+        $this->validateRequest();
         $store = vendorStore();
         $this->verifyStoreAction($store->id);
         $lynk = Lynk::with('products.product')->find($id);
@@ -89,7 +90,7 @@ class LynkController extends Controller
 
     public function update(Request $request)
     {
-        $this->validateRequst();
+        $this->validateRequest();
         $store = vendorStore();
         $this->verifyStoreAction($store->id);
         $validatedData = Validator::make($request->all(), [
@@ -112,5 +113,4 @@ class LynkController extends Controller
         $lynk->update($validatedData->validated());
         return response()->json($lynk);
     }
-
 }

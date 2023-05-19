@@ -10,18 +10,17 @@ class CreateLynksTable extends Migration
     {
         Schema::create('lynks', function (Blueprint $table) {
 
-		$table->increments('id');
-		$table->integer('store_id')->nullable()->unsigned();
-		$table->text('url')->nullable();
-		$table->integer('pkg_height')->nullable()->unsigned();
-		$table->integer('pkg_width')->nullable()->unsigned();
-		$table->integer('pkg_length')->nullable()->unsigned();
-		$table->integer('pkg_weight')->nullable()->unsigned();
-		$table->string('shipping_charges')->nullable()->unsigned();
-		$table->integer('exchange_limit')->nullable();
-		$table->text('status')->nullable();
-        $table->timestamps();
-
+            $table->increments('id');
+            $table->integer('store_id')->nullable()->unsigned();
+            $table->text('url')->nullable();
+            $table->integer('pkg_height')->nullable()->unsigned();
+            $table->integer('pkg_width')->nullable()->unsigned();
+            $table->integer('pkg_length')->nullable()->unsigned();
+            $table->integer('pkg_weight')->nullable()->unsigned();
+            $table->string('shipping_charges')->nullable();
+            $table->integer('exchange_limit')->nullable();
+            $table->text('status')->nullable();
+            $table->timestamps();
         });
     }
 

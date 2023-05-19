@@ -15,8 +15,9 @@ use Illuminate\Support\Str;
 class StoreController extends Controller
 {
     //
-    function list(Request $request) {
-        $this->validateRequst();
+    function list(Request $request)
+    {
+        $this->validateRequest();
         $store = vendorStore();
         $lynks = Store::where(['user_id' => Auth()->user()->id])->with(['user', 'logo', 'cover'])->first();
         return $this->success([
@@ -57,7 +58,7 @@ class StoreController extends Controller
             'locality' => 'nullable',
             'brand_color' => 'nullable',
         ]);
-        
+
         if ($validatedData->fails()) {
             $message = $validatedData->errors()->first();
             return $this->error($message, 401);
@@ -65,7 +66,7 @@ class StoreController extends Controller
         $store_uid = Str::random(12);
         do {
             $_store = Store::where(['store_uid' => $store_uid])->first();
-        } while($_store);
+        } while ($_store);
         // OTP verification enabled.
         // $this->OTPMiddleware(null, $request);
 
@@ -73,25 +74,25 @@ class StoreController extends Controller
         $store = new Store;
         $store->user_id = auth()->user()->id;
         $store->store_uid = $store_uid;
-        
-        foreach($validatedData->validated() as $key => $value) {
-            if(($key == 'store_logo') || $key == 'store_header_cover')
-            continue;
+
+        foreach ($validatedData->validated() as $key => $value) {
+            if (($key == 'store_logo') || $key == 'store_header_cover')
+                continue;
             $store->$key = $value;
         }
         // Upload store logo image
-        if(isset($request->store_logo)) {
+        if (isset($request->store_logo)) {
             // $storeLogoPath = $request->file('store_logo')->store('uploads');
             $asset = Asset::create(['url' => $request->store_logo, 'type' => 'image']);
             $store->store_logo = $asset->id;
         }
-        if(isset($request->store_header_cover)) {
+        if (isset($request->store_header_cover)) {
             // $storeLogoPath = $request->file('store_logo')->store('uploads');
             $asset = Asset::create(['url' => $request->store_header_cover, 'type' => 'image']);
             $store->store_header_cover = $asset->id;
         }
         // Upload store header cover image
- 
+
         // Save the new Store instance to the database
         $store->save();
         return $this->success([
@@ -102,9 +103,9 @@ class StoreController extends Controller
     // Update an existing store
     public function update(Request $request)
     {
-        $this->validateRequst();
+        $this->validateRequest();
         $store = vendorStore();
-        if(!$store) {
+        if (!$store) {
             return $this->store($request);
         }
         // Validate the request data
@@ -147,19 +148,19 @@ class StoreController extends Controller
 
         // Create a new Store model instance
         $store = Store::find($store->id);
-        
-        foreach($validatedData->validated() as $key => $value) {
-            if(($key == 'store_logo') || $key == 'store_header_cover')
-            continue;
+
+        foreach ($validatedData->validated() as $key => $value) {
+            if (($key == 'store_logo') || $key == 'store_header_cover')
+                continue;
             $store->$key = $value;
         }
         // Upload store logo image
-        if(isset($request->store_logo)) {
+        if (isset($request->store_logo)) {
             // $storeLogoPath = $request->file('store_logo')->store('uploads');
             $asset = Asset::create(['url' => $request->store_logo, 'type' => 'image']);
             $store->store_logo = $asset->id;
         }
-        if(isset($request->store_header_cover)) {
+        if (isset($request->store_header_cover)) {
             // $storeLogoPath = $request->file('store_logo')->store('uploads');
             $asset = Asset::create(['url' => $request->store_header_cover, 'type' => 'image']);
             $store->store_header_cover = $asset->id;
@@ -174,9 +175,9 @@ class StoreController extends Controller
     // Get a single store by ID
     public function show(Request $request)
     {
-        $this->validateRequst();
+        $this->validateRequest();
         $store = vendorStore();
-        if(!$store) {
+        if (!$store) {
             return $this->error('Please complete your business profile.', 401);
         }
         $store = Store::with(['user', 'logo', 'cover'])->find($store->id);
@@ -187,9 +188,9 @@ class StoreController extends Controller
 
     public function details()
     {
-        $this->validateRequst();
+        $this->validateRequest();
         $store = vendorStore();
-        $lynks = Lynk::where(['lynks.store_id' => $store->id ])->with(['products.product.record', 'record', 'products.product.images.productImage'])->get();
+        $lynks = Lynk::where(['lynks.store_id' => $store->id])->with(['products.product.record', 'record', 'products.product.images.productImage'])->get();
         $_lynks = [];
         $_lynks['store'] = $store;
         $_lynks['lynks'] = $lynks;
@@ -198,10 +199,11 @@ class StoreController extends Controller
         ]);
     }
 
-    public function sectionCreate(Request $request) {
-        $this->validateRequst();
+    public function sectionCreate(Request $request)
+    {
+        $this->validateRequest();
         $store = vendorStore();
-        if(!$store) {
+        if (!$store) {
             return $this->error('Please complete your business profile.', 401);
         }
         $validatedData = Validator::make($request->all(), [
@@ -217,17 +219,18 @@ class StoreController extends Controller
         ], 'Section created successfully');
     }
 
-    public function sectionList(Request $request) {
-        $this->validateRequst();
+    public function sectionList(Request $request)
+    {
+        $this->validateRequest();
         $store = vendorStore();
-        if(!$store) {
+        if (!$store) {
             return $this->error('Please complete your business profile.', 401);
         }
         $products = [];
-        $_sections = CatalogsSection::where(['catalogs_sections.store_id' =>$store->id])->get();
+        $_sections = CatalogsSection::where(['catalogs_sections.store_id' => $store->id])->get();
         $sections = [];
         $index = 0;
-        foreach($_sections as $section) {
+        foreach ($_sections as $section) {
             $products = CatalogSectionProduct::where(['section_id' => $section->id])->get();
             $sections[] = $section;
             $sections[$index]->products = $products;

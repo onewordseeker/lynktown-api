@@ -8,6 +8,8 @@ use App\Http\Controllers\LynkController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CustomerController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,7 +30,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/me', function(Request $request) {
+    Route::get('/me', function (Request $request) {
         return auth()->user();
     });
 
@@ -37,7 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/lynk/create', [LynkController::class, 'store']);
     Route::post('/lynk/single/{id}', [LynkController::class, 'show']);
     Route::post('/lynk/update', [LynkController::class, 'update']);
-    
+
     // Store Routes
     Route::post('/store/list', [StoreController::class, 'list']);
     Route::post('/store/create', [StoreController::class, 'store']);
@@ -47,7 +49,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/section/create', [StoreController::class, 'sectionCreate']);
     Route::post('/section/list', [StoreController::class, 'sectionList']);
     Route::post('dashboard/details', [StoreController::class, 'details']);
-    
+
     // Products
     Route::post('/product/list', [ProductController::class, 'list']);
     Route::post('/product/add_to_catalog', [ProductController::class, 'addToCatalog']);
@@ -62,7 +64,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/catalog/create', [CatalogController::class, 'store']);
     Route::post('/catalog/single/{id}', [CatalogController::class, 'show']);
     Route::post('/catalog/update/{id}', [CatalogController::class, 'update']);
-    
+
 
     Route::post('/test', [AuthController::class, 'test']);
 
@@ -73,5 +75,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/auth/delete', [AuthController::class, 'deleteAccount']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
-});
 
+    Route::prefix('/customer')->controller(CustomerController::class)->group(function () {
+        Route::post('/feed', 'feed');
+        Route::post('/togglewishlist', 'toggleWishlist');
+        Route::post('/lynk/{id}', 'lynk_products');
+    });
+});

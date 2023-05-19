@@ -16,19 +16,20 @@ use Illuminate\Support\Str;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests, ApiResponser, ApiMiddleware;
-    function OTPMiddleware($phone_no = null, $request = null) {
+    function OTPMiddleware($phone_no = null, $request = null)
+    {
         $request = $request ? $request : ($_GET ? $_GET : $_POST);
-        if(!isset($request['verification_code'])) {
+        if (!isset($request['verification_code'])) {
             $this->sendOTP($phone_no ? $phone_no : auth()->user()->phone_no);
             exit;
         } else {
             $code = $request['verification_code'];
             $otp = PhoneVerification::where(['otp_code' => $code, 'is_expired' => 0, 'phone_no' => $phone_no ? $phone_no : auth()->user()->phone_no])->first();
-            if($otp) {
+            if ($otp) {
                 $otp->is_expired = 1;
                 $otp->save();
                 $user = User::where(['phone_no' => $phone_no ? $phone_no : auth()->user()->phone_no])->first();
-                if($user) {
+                if ($user) {
                     $user->remember_token = Str::random(64);
                     $user->save();
                 }
@@ -43,9 +44,10 @@ class Controller extends BaseController
             }
         }
     }
-    function verifyStoreAction($store_id) {
+    function verifyStoreAction($store_id)
+    {
         $store = Store::find($store_id);
-        if(!$store) {
+        if (!$store) {
             print_r(json_encode([
                 'status' => 'failed',
                 'message' => 'Invalid request',
@@ -56,8 +58,9 @@ class Controller extends BaseController
             $store;
         }
     }
-    function validateRequst() {
-        if(!isset(Auth()->user()->id)) {
+    function validateRequest()
+    {
+        if (!isset(Auth()->user()->id)) {
             print_r(json_encode([
                 'status' => 'Failed',
                 'message' => 'Invalid request',

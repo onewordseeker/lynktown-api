@@ -26,7 +26,8 @@ class User extends Authenticatable
         'photo_asset_id',
         'cover_photo_asset_id',
         'verification_id',
-        'is_deleted'
+        'is_deleted',
+        'account_type'
     ];
 
     /**

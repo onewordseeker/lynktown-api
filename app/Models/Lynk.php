@@ -24,6 +24,10 @@ class Lynk extends Model
     {
         return $this->hasMany(LynkProduct::class, 'lynk_id');
     }
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id');
+    }
     public function record()
     {
         return $this->hasOne(RecordDetails::class, 'lynk_id');
