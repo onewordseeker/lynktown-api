@@ -1,0 +1,334 @@
+{
+	"info": {
+		"_postman_id": "baa2963c-3a24-428b-b9cf-18a0b5691c94",
+		"name": "lynktown",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21874213"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "test@email.com",
+							"type": "text"
+						},
+						{
+							"key": "phone_no",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "abbas",
+							"type": "text"
+						},
+						{
+							"key": "verification_code",
+							"value": "588958",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "account_type",
+							"value": "customer",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/auth/register",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "phone_no",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "verification_code",
+							"value": "197883",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/auth/login",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lynk Feed",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{server}}/customer/feed",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"feed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lynk Details",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "lynk",
+							"value": "93",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/lynk/97",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"lynk",
+						"97"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Toggle Wishlist",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "11",
+							"type": "text"
+						},
+						{
+							"key": "lynk_id",
+							"value": "93",
+							"type": "text"
+						},
+						{
+							"key": "store_id",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/togglewishlist",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"togglewishlist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": 10,\r\n    \"store_id\": 10,\r\n    \"lynk_id\": 97,\r\n    \"shipping_address\": \"123 Street, City\",\r\n    \"shipping_charges\": 10,\r\n    \"order_start_date\": \"2023-05-01\",\r\n    \"phone_no\": \"1234567890\",\r\n    \"note\": \"Sample note\",\r\n    \"status\": \"pending\",\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 59,\r\n            \"quantity\": 2,\r\n            \"size\": \"L\"\r\n            \r\n        },\r\n        {\r\n            \"product_id\": 60,\r\n            \"quantity\": 1,\r\n            \"size\": \"M\"\r\n            \r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/customer/createorder",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"createorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Store Access",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "10",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/accessstore/10",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"accessstore",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Follow Store",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "store_id",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/followstore",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"followstore"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "server",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "Token",
+			"value": "Bearer 36|8JjiUEC5KeRWbtEBVUdEiqW3dgPuv5g0hhaYu3ko"
+		}
+	]
+}
