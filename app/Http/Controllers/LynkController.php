@@ -22,7 +22,7 @@ class LynkController extends Controller
         }
         $this->validateRequst();
         $store = vendorStore();
-        $lynks = Lynk::where(['lynks.store_id' => $store->id ])->with(['products.product.record', 'record', 'products.product.images.productImage'])->get();
+        $lynks = Lynk::where(['lynks.store_id' => $store->id ])->with(['products.product.record', 'record', 'products.product.images.productImage'])->skip(0)->take(5)->get();
         return $this->success([
             $lynks
         ]);

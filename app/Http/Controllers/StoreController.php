@@ -228,7 +228,7 @@ class StoreController extends Controller
         $sections = [];
         $index = 0;
         foreach($_sections as $section) {
-            $products = CatalogSectionProduct::where(['section_id' => $section->id])->get();
+            $products = CatalogSectionProduct::where(['section_id' => $section->id])->join('products', ['products.id' => 'catalog_section_products.product_id'])->get();
             $sections[] = $section;
             $sections[$index]->products = $products;
             $index++;

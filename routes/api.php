@@ -67,11 +67,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/test', [AuthController::class, 'test']);
 
     Route::post('/profile-edit', [UserController::class, 'profileEdit']);
+    Route::post('/user/delete', [UserController::class, 'deleteAccount']);
+
     Route::post('/password-reset', [AuthController::class, 'resetPassword']);
     Route::post('/set-new-password', [AuthController::class, 'setNewPassword']);
     Route::post('/password-forget', [AuthController::class, 'forgetPassword']);
 
-    Route::post('/auth/delete', [AuthController::class, 'deleteAccount']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 });
 
