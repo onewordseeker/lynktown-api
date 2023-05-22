@@ -149,19 +149,19 @@ class AuthController extends Controller
         ];
     }
 
-    public function deleteAccount()
-    {
-        // OTP verification enabled.
-        $this->OTPMiddleware();
+    // public function deleteAccount()
+    // {
+    //     // OTP verification enabled.
+    //     $this->OTPMiddleware();
 
-        $user = auth()->user();
-        $_user = User::find($user->id);
-        $_user->is_deleted = 1;
-        $_user->save();
-        return [
-            'message' => 'Account deleted successfully'
-        ];
-    }
+    //     $user = auth()->user();
+    //     $_user = User::find($user->id);
+    //     $_user->is_deleted = 1;
+    //     $_user->save();
+    //     return [
+    //         'message' => 'Account deleted successfully'
+    //     ];
+    // }
 
     public function test() {
         $this->OTPMiddleware();

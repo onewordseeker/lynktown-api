@@ -27,5 +27,23 @@ class UserController extends Controller
             $_user
         ]);
     }
+
+    function deleteAccount(Request $request) {
+        $user = auth()->user();
+        if (!$user) {
+            return $this->error('Could not delete user', 401);
+        }
+          // OTP verification enabled.
+          $this->OTPMiddleware(null, $request);
+
+        $_user = User::find($user->id);
+        $_user->is_deleted = 1;
+        $_user->save();
+        if ($_user->is_deleted) {
+            return $this->success([], 'User deleted');
+        } else {
+            return $this->error('Could not delete user', 401);
+        }
+    }
     
 }
