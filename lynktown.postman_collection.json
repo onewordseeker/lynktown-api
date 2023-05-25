@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "baa2963c-3a24-428b-b9cf-18a0b5691c94",
+		"_postman_id": "50e2df05-c2e5-43d4-baf9-f98d519f9e23",
 		"name": "lynktown",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21874213"
+		"_exporter_id": "26422377"
 	},
 	"item": [
 		{
@@ -70,7 +70,7 @@
 						},
 						{
 							"key": "verification_code",
-							"value": "197883",
+							"value": "322912",
 							"type": "text"
 						}
 					]
@@ -209,7 +209,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user_id\": 10,\r\n    \"store_id\": 10,\r\n    \"lynk_id\": 97,\r\n    \"shipping_address\": \"123 Street, City\",\r\n    \"shipping_charges\": 10,\r\n    \"order_start_date\": \"2023-05-01\",\r\n    \"phone_no\": \"1234567890\",\r\n    \"note\": \"Sample note\",\r\n    \"status\": \"pending\",\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 59,\r\n            \"quantity\": 2,\r\n            \"size\": \"L\"\r\n            \r\n        },\r\n        {\r\n            \"product_id\": 60,\r\n            \"quantity\": 1,\r\n            \"size\": \"M\"\r\n            \r\n        }\r\n    ]\r\n}\r\n",
+					"raw": "{\r\n    \"user_id\": 10,\r\n    \"store_id\": 10,\r\n    \"lynk_id\": 95,\r\n    \"shipping_address\": \"123 Street, City\",\r\n    \"shipping_charges\": 10,\r\n    \"order_start_date\": \"2023-05-01\",\r\n    \"phone_no\": \"1234567890\",\r\n    \"note\": \"Sample note\",\r\n    \"status\": \"pending\",\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 59,\r\n            \"quantity\": 2,\r\n            \"size\": \"L\"\r\n            \r\n        },\r\n        {\r\n            \"product_id\": 60,\r\n            \"quantity\": 1,\r\n            \"size\": \"M\"\r\n            \r\n        }\r\n    ]\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -294,6 +294,171 @@
 					"path": [
 						"customer",
 						"followstore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Custom Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": 10,\r\n    \"store_id\": 10,\r\n    \"lynk_id\": 97,\r\n    \"shipping_address\": \"123 Street, City\",\r\n    \"shipping_charges\": 10,\r\n    \"order_start_date\": \"2023-05-01\",\r\n    \"phone_no\": \"1234567890\",\r\n    \"note\": \"Sample note\",\r\n    \"status\": \"pending\",\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 59,\r\n            \"quantity\": 2,\r\n            \"size\": \"L\"\r\n        },\r\n        {\r\n            \"product_id\": 60,\r\n            \"quantity\": 1,\r\n            \"size\": \"M\"\r\n        }\r\n    ],\r\n    \"measurements\": {\r\n        \"fitting\": \"Regular\",\r\n        \"gender\": \"Male\",\r\n        \"back\": 39,\r\n        \"front\": 40,\r\n        \"ankle\": 10,\r\n        \"calf\": 15,\r\n        \"full_length\": 42,\r\n        \"hip_round\": 38,\r\n        \"inseam\": 32,\r\n        \"thigh\": 20,\r\n        \"waist\": 34,\r\n        \"arm_hole\": 18,\r\n        \"chest\": 40,\r\n        \"neck\": 16,\r\n        \"shoulder\": 18,\r\n        \"sleeve_length\": 24,\r\n        \"wrist\": 8,\r\n        \"size\": \"M\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/customer/createcustomorder",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"createcustomorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Measurement",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"user_id\": 10,\r\n    \"measurements\": {\r\n        \"user_id\": 10,\r\n        \"fitting\": \"Regular\",\r\n        \"gender\": \"Male\",\r\n        \"back\": 39,\r\n        \"front\": 40,\r\n        \"ankle\": 10,\r\n        \"calf\": 15,\r\n        \"full_length\": 42,\r\n        \"hip_round\": 38,\r\n        \"inseam\": 32,\r\n        \"thigh\": 20,\r\n        \"waist\": 34,\r\n        \"arm_hole\": 18,\r\n        \"chest\": 40,\r\n        \"neck\": 16,\r\n        \"shoulder\": 18,\r\n        \"sleeve_length\": 24,\r\n        \"wrist\": 8,\r\n        \"size\": \"M\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/customer/addmeasurement",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"addmeasurement"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Single Measurement",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/getsinglemeasurement/1",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"getsinglemeasurement",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Single Measurement",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"measurement\": {\r\n        \"fitting\": \"Updated Regular\",\r\n        \"gender\": \"Updated Male\",\r\n        \"back\": 20,\r\n        \"front\": 41,\r\n        \"ankle\": 11,\r\n        \"calf\": 16,\r\n        \"full_length\": 43,\r\n        \"hip_round\": 39,\r\n        \"inseam\": 33,\r\n        \"thigh\": 21,\r\n        \"waist\": 35,\r\n        \"arm_hole\": 19,\r\n        \"chest\": 41,\r\n        \"neck\": 17,\r\n        \"shoulder\": 19,\r\n        \"sleeve_length\": 25,\r\n        \"wrist\": 9,\r\n        \"size\": \"M\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/customer/measurement/update/2",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"measurement",
+						"update",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Measurements",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{server}}/customer/getallmeasurements",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"getallmeasurements"
 					]
 				}
 			},

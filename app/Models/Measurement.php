@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
 
 class Measurement extends Model
@@ -27,4 +28,14 @@ class Measurement extends Model
         'wrist',
         'size',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function measurement()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
