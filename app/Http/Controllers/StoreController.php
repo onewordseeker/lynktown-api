@@ -190,6 +190,9 @@ class StoreController extends Controller
     {
         $this->validateRequest();
         $store = vendorStore();
+        if (!$store) {
+            return $this->error('Please complete your business profile.', 401);
+        }
         $lynks = Lynk::where(['lynks.store_id' => $store->id])->with(['products.product.record', 'record', 'products.product.images.productImage'])->get();
         $_lynks = [];
         $_lynks['store'] = $store;

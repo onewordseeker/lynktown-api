@@ -10,6 +10,7 @@ use App\Models\Follow;
 use App\Models\Product;
 use App\Models\Wishlist;
 use App\Models\OrderProduct;
+use App\Models\Measurement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -103,6 +104,11 @@ class CustomerController extends Controller
     {
         try {
             $this->validateRequest();
+
+if (!$request->input('measurement_id')) 
+{
+    return $request->input('measurement_id');
+}
 
             $userId = $request->input('user_id');
             $storeId = $request->input('store_id');
@@ -229,4 +235,155 @@ class CustomerController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
+    // add measurement
+
+    public function addMeasurement(Request $request)
+    {
+        try {
+            $this->validateRequest();
+
+       $validatedData = $request->validate([
+        'user_id' => 'required',
+        'measurements' => 'required'
+    ]);
+    
+    $measurement = auth()->user()->measurement()->create($validatedData['measurements']);
+            return response()->json(['message' =>
+
+            'Measurementd created successfully'], 201);
+        } catch (\Throwable $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+        }
+        }
+        
+        public function singleMeasurement($id)
+        {
+            // Retrieve the measurement ID from the form data
+            $measurementId = Measurement::findOrFail($id);
+    
+            if ($measurementId) {
+                // Measurement found, do something with it
+                // For example, you can return it as a JSON response
+                return response()->json($measurementId);
+            } else {
+                // Measurement not found
+                return response()->json(['error' => 'Measurement not found'], 404);
+            }
+        }
+        
+        
+
+        public function updateMeasurement(Request $request, Measurement $measurement)
+        {
+            $measurementData = $request->input('measurement');
+        
+            if ($measurement) {
+                $measurement->update($measurementData);
+        
+                return response()->json(['message' => 'Measurement updated successfully']);
+            } else {
+                return response()->json(['error' => 'Measurement not found'], 404);
+            }
+        }
+
+
+        public function getAllMeasurement()
+        {
+            $this->validateRequest();
+
+            // return auth()->user()->id;
+
+            $measurements = auth()->user()->measurement;
+    
+            return response()->json(['measurements' => $measurements]);
+        }
+
+
+
+//         public function createCustomOrder(Request $request)
+// {
+//     try {
+//         $this->validateRequest();
+
+//         $userId = $request->input('user_id');
+//         $storeId = $request->input('store_id');
+//         $lynkId = $request->input('lynk_id');
+//         $shippingAddress = $request->input('shipping_address');
+//         $shippingCharges = $request->input('shipping_charges');
+//         $orderStartDate = $request->input('order_start_date');
+//         $phoneNo = $request->input('phone_no');
+//         $note = $request->input('note');
+//         $status = $request->input('status');
+//         $products = $request->input('products');
+//         $measurements = $request->input('measurements');
+
+//         $user = User::findOrFail($userId);
+//         $store = Store::findOrFail($storeId);
+//         $lynk = Lynk::findOrFail($lynkId);
+
+//         // Calculate total price from product prices and quantities
+//         $totalPrice = 0;
+//         $order = new Order();
+//         $measurement = new Measurement();
+//         foreach ($products as $product) {
+//             $productId = $product['product_id'];
+//             $quantity = $product['quantity'];
+//             $size = $product['size'];
+
+//             $productPrice = Product::where('id', $productId)->value('price');
+//             $subtotalPrice = $productPrice * $quantity;
+//             $totalPrice += $subtotalPrice;
+
+//             // Create order products
+//             $orderProduct = new OrderProduct();
+//             $orderProduct->order()->associate($order);
+//             $orderProduct->product_id = $productId;
+//             $orderProduct->quantity = $quantity;
+//             $orderProduct->price = $productPrice;
+//             $orderProduct->name = Product::where('id', $productId)->value('name');
+//             $orderProduct->size = $size;
+//             // Set other fields as needed
+//             $orderProduct->save();
+//         }
+
+//         // Check if passed product IDs exist in the lynk
+//         $lynkProducts = $lynk->products->pluck('product_id')->toArray();
+//         $requestedProductIds = collect($products)->pluck('product_id')->toArray();
+//         $missingProducts = array_diff($requestedProductIds, $lynkProducts);
+//         if (!empty($missingProducts)) {
+//             return response()->json(['error' => 'Some products are not available in the lynk'], 400);
+//         }
+
+//         // Set the customer name from the user
+//         $customerName = $user->name;
+
+//         $order->user()->associate($user);
+//         $order->store()->associate($store);
+//         $order->lynk()->associate($lynk);
+//         $order->total_price = $totalPrice;
+//         $order->subtotal_price = $totalPrice; // Assuming no discounts
+//         $order->shipping_address = $shippingAddress;
+//         $order->shipping_charges = $shippingCharges;
+//         $order->order_start_date = $orderStartDate;
+//         $order->customer_name = $customerName;
+//         $order->phone_no = $phoneNo;
+//         $order->note = $note;
+//         $order->status = $status;
+//         $order->save();
+
+//         // Store measurements for the order
+//         $measurement->user()->associate($user);
+//         $measurement->order()->associate($order);
+//         $measurement->fill($measurements);
+//         $measurement->save();
+
+//         return response()->json(['message' =>
+//         'Order created successfully'], 201);
+//     } catch (\Throwable $e) {
+//     return response()->json(['error' => $e->getMessage()], 500);
+//     }
+// }    
+           
 }

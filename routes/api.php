@@ -9,6 +9,7 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/product/update', [ProductController::class, 'update']);
     Route::post('/product/single/{id}', [ProductController::class, 'show']);
 
+    // Orders
+    Route::post('/order/list', [OrderController::class, 'list']);
+    Route::post('/order/update', [OrderController::class, 'update']);
+    Route::post('/order/single/{id}', [OrderController::class, 'show']);
 
     // Store Routes
     Route::post('/catalog/list', [CatalogController::class, 'list']);
@@ -84,5 +89,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/followstore', 'toggleFollow');
         Route::post('/togglewishlist', 'toggleWishlist');
         Route::post('/accessstore/{id}', 'accessStore');
+        Route::post('/addmeasurement', 'addMeasurement');
+        Route::post('/getsinglemeasurement/{id}', 'singleMeasurement');
+        Route::post('/measurement/update/{measurement}', 'updateMeasurement');
+        Route::post('/getallmeasurements', 'getAllMeasurement');
     });
 });
