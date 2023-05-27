@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: May 19, 2023 at 07:01 PM
--- Server version: 8.0.31
--- PHP Version: 8.0.26
+-- Host: 127.0.0.1
+-- Generation Time: May 27, 2023 at 08:25 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,15 +27,13 @@ SET time_zone = "+00:00";
 -- Table structure for table `assets`
 --
 
-DROP TABLE IF EXISTS `assets`;
-CREATE TABLE IF NOT EXISTS `assets` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `assets` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `url` text DEFAULT NULL,
+  `type` varchar(200) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `assets`
@@ -142,15 +140,13 @@ INSERT INTO `assets` (`id`, `url`, `type`, `created_at`, `updated_at`) VALUES
 -- Table structure for table `catalogs`
 --
 
-DROP TABLE IF EXISTS `catalogs`;
-CREATE TABLE IF NOT EXISTS `catalogs` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `category` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `store_id` int DEFAULT NULL,
-  `status` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '1',
+CREATE TABLE `catalogs` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `category` varchar(200) DEFAULT NULL,
+  `store_id` int(11) DEFAULT NULL,
+  `status` varchar(200) DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -159,16 +155,14 @@ CREATE TABLE IF NOT EXISTS `catalogs` (
 -- Table structure for table `catalogs_sections`
 --
 
-DROP TABLE IF EXISTS `catalogs_sections`;
-CREATE TABLE IF NOT EXISTS `catalogs_sections` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `store_id` int DEFAULT NULL,
-  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `catalogs_sections` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `store_id` int(11) DEFAULT NULL,
+  `name` varchar(200) DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `catalogs_sections`
@@ -185,18 +179,14 @@ INSERT INTO `catalogs_sections` (`id`, `store_id`, `name`, `status`, `created_at
 -- Table structure for table `catalog_products`
 --
 
-DROP TABLE IF EXISTS `catalog_products`;
-CREATE TABLE IF NOT EXISTS `catalog_products` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `section_id` int UNSIGNED DEFAULT NULL,
-  `product_id` int UNSIGNED DEFAULT NULL,
-  `status` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `catalog_products` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `section_id` int(10) UNSIGNED DEFAULT NULL,
+  `product_id` int(10) UNSIGNED DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `catalog_products_product_id_foreign` (`product_id`),
-  KEY `catalog_products_catalog_id_foreign` (`section_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -204,18 +194,14 @@ CREATE TABLE IF NOT EXISTS `catalog_products` (
 -- Table structure for table `catalog_section_products`
 --
 
-DROP TABLE IF EXISTS `catalog_section_products`;
-CREATE TABLE IF NOT EXISTS `catalog_section_products` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `product_id` int UNSIGNED DEFAULT NULL,
-  `section_id` int UNSIGNED DEFAULT NULL,
-  `status` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '1',
+CREATE TABLE `catalog_section_products` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `product_id` int(10) UNSIGNED DEFAULT NULL,
+  `section_id` int(10) UNSIGNED DEFAULT NULL,
+  `status` varchar(200) DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `catalog_section_products_section_id_foreign` (`section_id`),
-  KEY `catalog_section_products_product_id_foreign` (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `catalog_section_products`
@@ -233,17 +219,14 @@ INSERT INTO `catalog_section_products` (`id`, `product_id`, `section_id`, `statu
 -- Table structure for table `delivery_settings`
 --
 
-DROP TABLE IF EXISTS `delivery_settings`;
-CREATE TABLE IF NOT EXISTS `delivery_settings` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `store_id` int UNSIGNED DEFAULT NULL,
+CREATE TABLE `delivery_settings` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `store_id` int(10) UNSIGNED DEFAULT NULL,
   `in_bangalore_delivery_fee` double(8,2) DEFAULT NULL,
   `out_bangalore_delivery_fee` double(8,2) DEFAULT NULL,
   `per_km` double(8,2) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `delivery_settings_store_id_foreign` (`store_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -252,25 +235,19 @@ CREATE TABLE IF NOT EXISTS `delivery_settings` (
 -- Table structure for table `exchange_requests`
 --
 
-DROP TABLE IF EXISTS `exchange_requests`;
-CREATE TABLE IF NOT EXISTS `exchange_requests` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `order_id` int UNSIGNED DEFAULT NULL,
-  `store_id` int UNSIGNED DEFAULT NULL,
-  `product_id` int UNSIGNED DEFAULT NULL,
-  `business_id` int UNSIGNED DEFAULT NULL,
-  `user_id` int UNSIGNED DEFAULT NULL,
-  `reason` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `photo_id` int UNSIGNED DEFAULT NULL,
-  `status` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `exchange_requests` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `order_id` int(10) UNSIGNED DEFAULT NULL,
+  `store_id` int(10) UNSIGNED DEFAULT NULL,
+  `product_id` int(10) UNSIGNED DEFAULT NULL,
+  `business_id` int(10) UNSIGNED DEFAULT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `reason` text DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `photo_id` int(10) UNSIGNED DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `exchange_requests_product_id_foreign` (`product_id`),
-  KEY `exchange_requests_store_id_foreign` (`store_id`),
-  KEY `exchange_requests_user_id_foreign` (`user_id`),
-  KEY `exchange_requests_photo_id_foreign` (`photo_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -279,17 +256,14 @@ CREATE TABLE IF NOT EXISTS `exchange_requests` (
 -- Table structure for table `failed_jobs`
 --
 
-DROP TABLE IF EXISTS `failed_jobs`;
-CREATE TABLE IF NOT EXISTS `failed_jobs` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+CREATE TABLE `failed_jobs` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -298,17 +272,13 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 -- Table structure for table `follows`
 --
 
-DROP TABLE IF EXISTS `follows`;
-CREATE TABLE IF NOT EXISTS `follows` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `store_id` bigint UNSIGNED NOT NULL,
+CREATE TABLE `follows` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `store_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `follows_user_id_foreign` (`user_id`),
-  KEY `follows_store_id_foreign` (`store_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `follows`
@@ -323,16 +293,13 @@ INSERT INTO `follows` (`id`, `user_id`, `store_id`, `created_at`, `updated_at`) 
 -- Table structure for table `login_activity`
 --
 
-DROP TABLE IF EXISTS `login_activity`;
-CREATE TABLE IF NOT EXISTS `login_activity` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ip_address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_id` int UNSIGNED DEFAULT NULL,
-  `device_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+CREATE TABLE `login_activity` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `ip_address` varchar(200) DEFAULT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `device_info` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `login_activity_user_id_foreign` (`user_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -341,23 +308,20 @@ CREATE TABLE IF NOT EXISTS `login_activity` (
 -- Table structure for table `lynks`
 --
 
-DROP TABLE IF EXISTS `lynks`;
-CREATE TABLE IF NOT EXISTS `lynks` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `store_id` int UNSIGNED DEFAULT NULL,
-  `url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `pkg_height` int DEFAULT NULL,
-  `pkg_width` int DEFAULT NULL,
-  `pkg_length` int DEFAULT NULL,
-  `pkg_weight` int DEFAULT NULL,
-  `shipping_charges` int DEFAULT NULL,
-  `exchange_limit` int DEFAULT NULL,
-  `status` int DEFAULT '1',
+CREATE TABLE `lynks` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `store_id` int(10) UNSIGNED DEFAULT NULL,
+  `url` text DEFAULT NULL,
+  `pkg_height` int(11) DEFAULT NULL,
+  `pkg_width` int(11) DEFAULT NULL,
+  `pkg_length` int(11) DEFAULT NULL,
+  `pkg_weight` int(11) DEFAULT NULL,
+  `shipping_charges` int(11) DEFAULT NULL,
+  `exchange_limit` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `lynks_store_id_foreign` (`store_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lynks`
@@ -422,19 +386,15 @@ INSERT INTO `lynks` (`id`, `store_id`, `url`, `pkg_height`, `pkg_width`, `pkg_le
 -- Table structure for table `lynk_products`
 --
 
-DROP TABLE IF EXISTS `lynk_products`;
-CREATE TABLE IF NOT EXISTS `lynk_products` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `lynk_id` int UNSIGNED DEFAULT NULL,
-  `product_id` int UNSIGNED DEFAULT NULL,
-  `status` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+CREATE TABLE `lynk_products` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `lynk_id` int(10) UNSIGNED DEFAULT NULL,
+  `product_id` int(10) UNSIGNED DEFAULT NULL,
+  `status` text DEFAULT NULL,
+  `note` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `lynk_products_lynk_id_foreign` (`lynk_id`),
-  KEY `lynk_products_product_id_foreign` (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lynk_products`
@@ -502,33 +462,52 @@ INSERT INTO `lynk_products` (`id`, `lynk_id`, `product_id`, `status`, `note`, `c
 -- Table structure for table `measurements`
 --
 
-DROP TABLE IF EXISTS `measurements`;
-CREATE TABLE IF NOT EXISTS `measurements` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` int UNSIGNED DEFAULT NULL,
-  `fitting` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gender` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `back` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `front` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `ankle` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `calf` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `full_length` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `hip_round` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `inseam` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `thigh` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `waist` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `arm_hole` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `chest` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `neck` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `shoulder` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `sleeve_length` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `wrist` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `size` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+CREATE TABLE `measurements` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `fitting` varchar(20) DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `back` text DEFAULT NULL,
+  `front` text DEFAULT NULL,
+  `ankle` text DEFAULT NULL,
+  `calf` text DEFAULT NULL,
+  `full_length` text DEFAULT NULL,
+  `hip_round` text DEFAULT NULL,
+  `inseam` text DEFAULT NULL,
+  `thigh` text DEFAULT NULL,
+  `waist` text DEFAULT NULL,
+  `arm_hole` text DEFAULT NULL,
+  `chest` text DEFAULT NULL,
+  `neck` text DEFAULT NULL,
+  `shoulder` text DEFAULT NULL,
+  `sleeve_length` text DEFAULT NULL,
+  `wrist` text DEFAULT NULL,
+  `size` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `measurements_user_id_foreign` (`user_id`)
+  `front_image` varchar(191) DEFAULT NULL,
+  `back_image` varchar(191) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `measurements`
+--
+
+INSERT INTO `measurements` (`id`, `user_id`, `fitting`, `gender`, `back`, `front`, `ankle`, `calf`, `full_length`, `hip_round`, `inseam`, `thigh`, `waist`, `arm_hole`, `chest`, `neck`, `shoulder`, `sleeve_length`, `wrist`, `size`, `created_at`, `updated_at`, `front_image`, `back_image`) VALUES
+(1, 10, 'Updated Regular', 'Updated Male', '20', '41', '11', '16', '43', '39', '33', '21', '35', '19', '41', '17', '19', '25', '9', 'M', '2023-05-24 11:17:24', '2023-05-25 11:23:48', '', NULL),
+(2, 10, 'Updated Regular', 'Updated Male', '20', '41', '11', '16', '43', '39', '33', '21', '35', '19', '41', '17', '19', '25', '9', 'M', '2023-05-24 11:30:08', '2023-05-25 11:24:11', '', NULL),
+(3, 10, 'Regular', 'Male', '40', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-24 12:00:49', '2023-05-24 12:00:49', '', NULL),
+(4, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-24 12:01:12', '2023-05-24 12:01:12', '', NULL),
+(5, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-24 13:05:26', '2023-05-24 13:05:26', '', NULL),
+(6, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-24 14:07:03', '2023-05-24 14:07:03', '', NULL),
+(7, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-05-24 14:17:50', '2023-05-24 14:17:50', '', NULL),
+(8, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-24 14:19:23', '2023-05-24 14:19:23', '', NULL),
+(9, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-25 09:26:29', '2023-05-25 09:26:29', '', NULL),
+(10, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-27 12:15:09', '2023-05-27 12:15:09', '', NULL),
+(11, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-27 12:16:27', '2023-05-27 12:16:27', '', NULL),
+(12, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-27 12:18:08', '2023-05-27 12:18:08', 'url', 'url'),
+(13, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-27 12:38:57', '2023-05-27 12:38:57', 'url', 'url'),
+(14, 10, 'Regular', 'Male', '39', '40', '10', '15', '42', '38', '32', '20', '34', '18', '40', '16', '18', '24', '8', 'M', '2023-05-27 12:39:31', '2023-05-27 12:39:31', 'url', 'url');
 
 -- --------------------------------------------------------
 
@@ -536,13 +515,11 @@ CREATE TABLE IF NOT EXISTS `measurements` (
 -- Table structure for table `migrations`
 --
 
-DROP TABLE IF EXISTS `migrations`;
-CREATE TABLE IF NOT EXISTS `migrations` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -592,7 +569,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (41, '2023_05_07_102752_add_store_id_to_catalogs_table', 3),
 (42, '2023_05_11_105521_create_product_images_table', 4),
 (45, '2023_05_19_120653_create_wishlist_table', 5),
-(46, '2023_05_19_183854_create_follows_table', 6);
+(46, '2023_05_19_183854_create_follows_table', 6),
+(47, '2023_05_24_184554_add_measurement_id_to_orders', 7),
+(48, '2023_05_27_170820_add_front_back_images_to_measurements', 8),
+(49, '2023_05_27_172558_create_product_requests_table', 9);
 
 -- --------------------------------------------------------
 
@@ -600,18 +580,15 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- Table structure for table `notifications`
 --
 
-DROP TABLE IF EXISTS `notifications`;
-CREATE TABLE IF NOT EXISTS `notifications` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` int UNSIGNED DEFAULT NULL,
-  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `is_read` int NOT NULL DEFAULT '0',
-  `sent_to` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `notifications` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `message` text DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `is_read` int(11) NOT NULL DEFAULT 0,
+  `sent_to` varchar(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `notifications_user_id_foreign` (`user_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -620,28 +597,54 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 -- Table structure for table `orders`
 --
 
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE IF NOT EXISTS `orders` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` int UNSIGNED DEFAULT NULL,
-  `store_id` int UNSIGNED DEFAULT NULL,
-  `lynk_id` int UNSIGNED DEFAULT NULL,
-  `total_price` int DEFAULT NULL,
-  `subtotal_price` int DEFAULT NULL,
-  `shipping_address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `shipping_charges` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `order_start_date` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `customer_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `phone_no` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `status` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+CREATE TABLE `orders` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `store_id` int(10) UNSIGNED DEFAULT NULL,
+  `lynk_id` int(10) UNSIGNED DEFAULT NULL,
+  `total_price` int(11) DEFAULT NULL,
+  `subtotal_price` int(11) DEFAULT NULL,
+  `shipping_address` text DEFAULT NULL,
+  `shipping_charges` text DEFAULT NULL,
+  `order_start_date` text DEFAULT NULL,
+  `customer_name` text DEFAULT NULL,
+  `phone_no` text DEFAULT NULL,
+  `note` text DEFAULT NULL,
+  `status` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `orders_user_id_foreign` (`user_id`),
-  KEY `orders_store_id_foreign` (`store_id`),
-  KEY `orders_lynk_id_foreign` (`lynk_id`)
+  `measurement_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `store_id`, `lynk_id`, `total_price`, `subtotal_price`, `shipping_address`, `shipping_charges`, `order_start_date`, `customer_name`, `phone_no`, `note`, `status`, `created_at`, `updated_at`, `measurement_id`) VALUES
+(1, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-24 09:34:45', '2023-05-24 09:34:45', NULL),
+(2, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-24 09:36:45', '2023-05-24 09:36:45', NULL),
+(3, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-24 10:58:23', '2023-05-24 10:58:23', NULL),
+(4, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-24 11:12:31', '2023-05-24 11:12:31', NULL),
+(5, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-24 11:17:24', '2023-05-27 12:38:57', 13),
+(6, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-24 11:30:08', '2023-05-24 11:30:08', NULL),
+(7, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-24 12:00:49', '2023-05-24 12:00:49', NULL),
+(8, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-24 12:01:12', '2023-05-24 12:01:12', NULL),
+(9, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-24 13:05:26', '2023-05-24 13:05:26', NULL),
+(10, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:22:20', '2023-05-27 11:22:20', NULL),
+(11, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:29:52', '2023-05-27 11:29:52', NULL),
+(12, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:31:23', '2023-05-27 11:31:23', NULL),
+(13, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:32:40', '2023-05-27 11:32:40', NULL),
+(14, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:33:43', '2023-05-27 11:33:43', NULL),
+(15, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:34:12', '2023-05-27 11:34:12', NULL),
+(16, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:43:20', '2023-05-27 11:43:20', NULL),
+(17, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:46:57', '2023-05-27 11:46:57', NULL),
+(18, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:52:45', '2023-05-27 11:52:45', NULL),
+(19, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:55:16', '2023-05-27 11:55:16', NULL),
+(20, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:55:44', '2023-05-27 11:55:44', NULL),
+(21, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 11:56:12', '2023-05-27 11:56:12', NULL),
+(22, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 12:01:59', '2023-05-27 12:01:59', NULL),
+(23, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 12:02:32', '2023-05-27 12:02:32', NULL),
+(24, 10, 10, 97, 69770, 69770, '123 Street, City', '10', '2023-05-01', NULL, '1234567890', 'Sample note', 'pending', '2023-05-27 12:04:14', '2023-05-27 12:39:31', 14);
 
 -- --------------------------------------------------------
 
@@ -649,16 +652,13 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- Table structure for table `order_activity`
 --
 
-DROP TABLE IF EXISTS `order_activity`;
-CREATE TABLE IF NOT EXISTS `order_activity` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `order_id` int UNSIGNED DEFAULT NULL,
-  `status` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+CREATE TABLE `order_activity` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `order_id` int(10) UNSIGNED DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `note` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `order_activity_order_id_foreign` (`order_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -667,27 +667,78 @@ CREATE TABLE IF NOT EXISTS `order_activity` (
 -- Table structure for table `order_products`
 --
 
-DROP TABLE IF EXISTS `order_products`;
-CREATE TABLE IF NOT EXISTS `order_products` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `order_id` int UNSIGNED DEFAULT NULL,
-  `product_id` int UNSIGNED DEFAULT NULL,
-  `quantity` int DEFAULT NULL,
+CREATE TABLE `order_products` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `order_id` int(10) UNSIGNED DEFAULT NULL,
+  `product_id` int(10) UNSIGNED DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
   `price` double(8,2) DEFAULT NULL,
   `discount_price` double(8,2) DEFAULT NULL,
-  `post_link` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `img_id` int UNSIGNED DEFAULT NULL,
-  `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `size` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `exchange_available` int NOT NULL DEFAULT '1',
-  `status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `product_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `post_link` text DEFAULT NULL,
+  `img_id` int(10) UNSIGNED DEFAULT NULL,
+  `name` text DEFAULT NULL,
+  `size` text DEFAULT NULL,
+  `exchange_available` int(11) NOT NULL DEFAULT 1,
+  `status` varchar(100) DEFAULT NULL,
+  `product_type` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `order_products_order_id_foreign` (`order_id`),
-  KEY `order_products_img_id_foreign` (`img_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_products`
+--
+
+INSERT INTO `order_products` (`id`, `order_id`, `product_id`, `quantity`, `price`, `discount_price`, `post_link`, `img_id`, `name`, `size`, `exchange_available`, `status`, `product_type`, `created_at`, `updated_at`) VALUES
+(2, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 09:34:45', '2023-05-24 09:34:45'),
+(3, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-24 09:36:45', '2023-05-24 09:36:45'),
+(4, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 09:36:45', '2023-05-24 09:36:45'),
+(5, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-24 10:58:11', '2023-05-24 10:58:11'),
+(6, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 10:58:11', '2023-05-24 10:58:11'),
+(7, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-24 10:58:23', '2023-05-24 10:58:23'),
+(8, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 10:58:23', '2023-05-24 10:58:23'),
+(9, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-24 11:12:31', '2023-05-24 11:12:31'),
+(10, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 11:12:31', '2023-05-24 11:12:31'),
+(11, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-24 11:17:24', '2023-05-24 11:17:24'),
+(12, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 11:17:24', '2023-05-24 11:17:24'),
+(13, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-24 11:30:08', '2023-05-24 11:30:08'),
+(14, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 11:30:08', '2023-05-24 11:30:08'),
+(15, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-24 12:00:49', '2023-05-24 12:00:49'),
+(16, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 12:00:49', '2023-05-24 12:00:49'),
+(17, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-24 12:01:12', '2023-05-24 12:01:12'),
+(18, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 12:01:12', '2023-05-24 12:01:12'),
+(19, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-24 13:05:26', '2023-05-24 13:05:26'),
+(20, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-24 13:05:26', '2023-05-24 13:05:26'),
+(21, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:22:20', '2023-05-27 11:22:20'),
+(22, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:22:20', '2023-05-27 11:22:20'),
+(23, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:29:52', '2023-05-27 11:29:52'),
+(24, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:29:52', '2023-05-27 11:29:52'),
+(25, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:31:23', '2023-05-27 11:31:23'),
+(26, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:31:23', '2023-05-27 11:31:23'),
+(27, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:32:40', '2023-05-27 11:32:40'),
+(28, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:32:40', '2023-05-27 11:32:40'),
+(29, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:33:43', '2023-05-27 11:33:43'),
+(30, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:33:43', '2023-05-27 11:33:43'),
+(31, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:34:12', '2023-05-27 11:34:12'),
+(32, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:34:12', '2023-05-27 11:34:12'),
+(33, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:43:20', '2023-05-27 11:43:20'),
+(34, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:43:20', '2023-05-27 11:43:20'),
+(35, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:46:57', '2023-05-27 11:46:57'),
+(36, NULL, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:46:57', '2023-05-27 11:46:57'),
+(37, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:52:45', '2023-05-27 11:52:45'),
+(38, 18, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:52:45', '2023-05-27 11:52:45'),
+(39, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:55:16', '2023-05-27 11:55:16'),
+(40, 19, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:55:16', '2023-05-27 11:55:16'),
+(41, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:55:44', '2023-05-27 11:55:44'),
+(42, 20, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:55:44', '2023-05-27 11:55:44'),
+(43, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 11:56:12', '2023-05-27 11:56:12'),
+(44, 21, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 11:56:12', '2023-05-27 11:56:12'),
+(45, NULL, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 12:01:59', '2023-05-27 12:01:59'),
+(46, 22, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 12:01:59', '2023-05-27 12:01:59'),
+(47, 23, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 12:02:32', '2023-05-27 12:02:32'),
+(48, 23, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 12:02:32', '2023-05-27 12:02:32'),
+(49, 24, 59, 2, 6586.00, NULL, NULL, NULL, 'Hdjkfv', 'L', 1, NULL, NULL, '2023-05-27 12:04:14', '2023-05-27 12:04:14'),
+(50, 24, 60, 1, 56598.00, NULL, NULL, NULL, 'Jfjckvlgl', 'M', 1, NULL, NULL, '2023-05-27 12:04:14', '2023-05-27 12:04:14');
 
 -- --------------------------------------------------------
 
@@ -695,22 +746,31 @@ CREATE TABLE IF NOT EXISTS `order_products` (
 -- Table structure for table `order_requests`
 --
 
-DROP TABLE IF EXISTS `order_requests`;
-CREATE TABLE IF NOT EXISTS `order_requests` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` int UNSIGNED DEFAULT NULL,
-  `store_id` int UNSIGNED DEFAULT NULL,
-  `full_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone_no` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `business_id` int UNSIGNED DEFAULT NULL,
-  `status` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `note` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `order_requests` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `store_id` int(10) UNSIGNED DEFAULT NULL,
+  `full_name` varchar(200) DEFAULT NULL,
+  `phone_no` varchar(200) DEFAULT NULL,
+  `business_id` int(10) UNSIGNED DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `note` varchar(200) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `order_requests_user_id_foreign` (`user_id`),
-  KEY `order_requests_store_id_foreign` (`store_id`)
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_requests`
+--
+
+INSERT INTO `order_requests` (`id`, `user_id`, `store_id`, `full_name`, `phone_no`, `business_id`, `status`, `note`, `created_at`, `updated_at`) VALUES
+(1, 10, 10, 'abc', NULL, 2, 'pending', 'Sample note', '2023-05-27 13:11:50', '2023-05-27 13:11:50'),
+(2, 10, 10, 'abc', NULL, 2, 'pending', 'Sample note', '2023-05-27 13:12:23', '2023-05-27 13:12:23'),
+(3, 10, 10, 'abc', NULL, 2, 'pending', 'Sample note', '2023-05-27 13:13:27', '2023-05-27 13:13:27'),
+(4, 10, 10, 'abc', NULL, 2, 'pending', 'Sample note', '2023-05-27 13:13:53', '2023-05-27 13:13:53'),
+(5, 10, 10, 'abc', NULL, 2, 'pending', 'Sample note', '2023-05-27 13:15:23', '2023-05-27 13:15:23'),
+(6, 10, 10, 'abc', '1234567890', 2, 'pending', 'Sample note', '2023-05-27 13:16:31', '2023-05-27 13:16:31'),
+(7, 10, 10, 'abc', '1234567890', 2, 'pending', 'Sample note', '2023-05-27 13:21:30', '2023-05-27 13:21:30');
 
 -- --------------------------------------------------------
 
@@ -718,12 +778,10 @@ CREATE TABLE IF NOT EXISTS `order_requests` (
 -- Table structure for table `password_reset_tokens`
 --
 
-DROP TABLE IF EXISTS `password_reset_tokens`;
-CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`email`)
+CREATE TABLE `password_reset_tokens` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -732,22 +790,18 @@ CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
 -- Table structure for table `personal_access_tokens`
 --
 
-DROP TABLE IF EXISTS `personal_access_tokens`;
-CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tokenable_id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+CREATE TABLE `personal_access_tokens` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
+  `tokenable_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
-  KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `personal_access_tokens`
@@ -782,7 +836,12 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (33, 'App\\Models\\User', 9, 'API Token', '8a249d2060177b98ea53de4623a2c49b1eaa7cd2fd5d9d61927128388481c6b1', '[\"*\"]', '2023-05-18 09:03:32', NULL, '2023-05-17 20:57:21', '2023-05-18 09:03:32'),
 (34, 'App\\Models\\User', 10, 'API Token', '6bd90d39d57e0352e6bbb7e5d459381766bda9235675fcb01a86d3dfcdca4d64', '[\"*\"]', '2023-05-19 08:07:12', NULL, '2023-05-19 08:06:29', '2023-05-19 08:07:12'),
 (35, 'App\\Models\\User', 10, 'API Token', '069e593085089c87dfae5c860a80ff5a45c0663da3e7336f299b1d33ef9d02a8', '[\"*\"]', '2023-05-19 13:30:52', NULL, '2023-05-19 13:02:58', '2023-05-19 13:30:52'),
-(36, 'App\\Models\\User', 10, 'API Token', '81bbbc58e1c91daefec90adbbeeb83272db9b26af03eefb70fe3f9dc6c8c45e5', '[\"*\"]', '2023-05-19 14:00:32', NULL, '2023-05-19 13:54:22', '2023-05-19 14:00:32');
+(36, 'App\\Models\\User', 10, 'API Token', '81bbbc58e1c91daefec90adbbeeb83272db9b26af03eefb70fe3f9dc6c8c45e5', '[\"*\"]', '2023-05-19 14:00:32', NULL, '2023-05-19 13:54:22', '2023-05-19 14:00:32'),
+(37, 'App\\Models\\User', 10, 'API Token', '0a6bb99f0cb825b7b5fb74d836cae75028e0d4d77e447f6c219336abca41a02d', '[\"*\"]', '2023-05-24 11:12:31', NULL, '2023-05-23 14:22:59', '2023-05-24 11:12:31'),
+(38, 'App\\Models\\User', 10, 'API Token', '8495ed4507f1ec573766ecf7494d39ffe2fd44e2b74c1591d51ef6fec43b6688', '[\"*\"]', NULL, NULL, '2023-05-24 09:33:42', '2023-05-24 09:33:42'),
+(39, 'App\\Models\\User', 10, 'API Token', 'bce06a77d0e65ac63ad45cc0c8b29ac2024693851160eaf6a47e9df22e432b51', '[\"*\"]', '2023-05-24 14:19:23', NULL, '2023-05-24 10:55:55', '2023-05-24 14:19:23'),
+(40, 'App\\Models\\User', 10, 'API Token', '87283b238db8b5b7f9d147b06766acbc8df64f904ea3ab2a27a1e4226ad14771', '[\"*\"]', '2023-05-25 12:14:35', NULL, '2023-05-25 09:25:54', '2023-05-25 12:14:35'),
+(41, 'App\\Models\\User', 10, 'API Token', '0147b53a9e988f812a77b30b9bb9b0e6c270b1449e170d145266bf8480e68abf', '[\"*\"]', '2023-05-27 13:21:30', NULL, '2023-05-27 11:21:40', '2023-05-27 13:21:30');
 
 -- --------------------------------------------------------
 
@@ -790,16 +849,14 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 -- Table structure for table `phone_verifications`
 --
 
-DROP TABLE IF EXISTS `phone_verifications`;
-CREATE TABLE IF NOT EXISTS `phone_verifications` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `phone_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `otp_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `is_expired` tinyint(1) NOT NULL DEFAULT '0',
+CREATE TABLE `phone_verifications` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `phone_no` varchar(255) DEFAULT NULL,
+  `otp_code` varchar(255) DEFAULT NULL,
+  `is_expired` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `phone_verifications`
@@ -843,7 +900,12 @@ INSERT INTO `phone_verifications` (`id`, `phone_no`, `otp_code`, `is_expired`, `
 (35, '2', '186961', 1, '2023-05-19 08:04:30', '2023-05-19 08:04:38'),
 (36, '2', '588958', 1, '2023-05-19 08:06:16', '2023-05-19 08:06:29'),
 (37, '2', '821369', 1, '2023-05-19 13:02:50', '2023-05-19 13:02:58'),
-(38, '2', '197883', 1, '2023-05-19 13:54:15', '2023-05-19 13:54:22');
+(38, '2', '197883', 1, '2023-05-19 13:54:15', '2023-05-19 13:54:22'),
+(39, '2', '054154', 1, '2023-05-23 14:22:42', '2023-05-23 14:22:59'),
+(40, '2', '766071', 1, '2023-05-24 09:33:30', '2023-05-24 09:33:41'),
+(41, '2', '981666', 1, '2023-05-24 10:55:45', '2023-05-24 10:55:55'),
+(42, '2', '322912', 1, '2023-05-25 09:25:43', '2023-05-25 09:25:54'),
+(43, '2', '193529', 1, '2023-05-27 11:21:28', '2023-05-27 11:21:40');
 
 -- --------------------------------------------------------
 
@@ -851,28 +913,26 @@ INSERT INTO `phone_verifications` (`id`, `phone_no`, `otp_code`, `is_expired`, `
 -- Table structure for table `products`
 --
 
-DROP TABLE IF EXISTS `products`;
-CREATE TABLE IF NOT EXISTS `products` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `store_id` int DEFAULT NULL,
-  `quantity` int DEFAULT '1',
-  `price` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `discount_price` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `post_link` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `img_id` int UNSIGNED DEFAULT NULL,
-  `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `size` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `exchange_available` int DEFAULT NULL,
-  `return_available` int DEFAULT NULL,
-  `status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '1',
-  `new_arrival` int DEFAULT '0',
-  `recommended` int DEFAULT '0',
-  `catalog_enabled` int DEFAULT '0',
-  `product_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `products` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `store_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT 1,
+  `price` text DEFAULT NULL,
+  `discount_price` text DEFAULT NULL,
+  `post_link` text DEFAULT NULL,
+  `img_id` int(10) UNSIGNED DEFAULT NULL,
+  `name` text DEFAULT NULL,
+  `size` text DEFAULT NULL,
+  `exchange_available` int(11) DEFAULT NULL,
+  `return_available` int(11) DEFAULT NULL,
+  `status` varchar(100) DEFAULT '1',
+  `new_arrival` int(11) DEFAULT 0,
+  `recommended` int(11) DEFAULT 0,
+  `catalog_enabled` int(11) DEFAULT 0,
+  `product_type` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `products`
@@ -948,17 +1008,13 @@ INSERT INTO `products` (`id`, `store_id`, `quantity`, `price`, `discount_price`,
 -- Table structure for table `product_images`
 --
 
-DROP TABLE IF EXISTS `product_images`;
-CREATE TABLE IF NOT EXISTS `product_images` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `asset_id` int UNSIGNED DEFAULT NULL,
-  `product_id` int UNSIGNED DEFAULT NULL,
+CREATE TABLE `product_images` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `asset_id` int(10) UNSIGNED DEFAULT NULL,
+  `product_id` int(10) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `product_images_asset_id_foreign` (`asset_id`),
-  KEY `product_images_product_id_foreign` (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `product_images`
@@ -1035,21 +1091,48 @@ INSERT INTO `product_images` (`id`, `asset_id`, `product_id`, `created_at`, `upd
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_requests`
+--
+
+CREATE TABLE `product_requests` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_request_id` int(10) UNSIGNED NOT NULL,
+  `product_image` varchar(191) NOT NULL,
+  `product_link` varchar(191) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_requests`
+--
+
+INSERT INTO `product_requests` (`id`, `order_request_id`, `product_image`, `product_link`, `created_at`, `updated_at`) VALUES
+(1, 4, 'url1', 'url2', '2023-05-27 13:13:53', '2023-05-27 13:13:53'),
+(2, 4, 'url3', 'url4', '2023-05-27 13:13:53', '2023-05-27 13:13:53'),
+(3, 5, 'url1', 'url2', '2023-05-27 13:15:23', '2023-05-27 13:15:23'),
+(4, 5, 'url3', 'url4', '2023-05-27 13:15:23', '2023-05-27 13:15:23'),
+(5, 6, 'url1', 'url2', '2023-05-27 13:16:31', '2023-05-27 13:16:31'),
+(6, 6, 'url3', 'url4', '2023-05-27 13:16:31', '2023-05-27 13:16:31'),
+(7, 7, 'url1', 'url2', '2023-05-27 13:21:30', '2023-05-27 13:21:30'),
+(8, 7, 'url3', 'url4', '2023-05-27 13:21:30', '2023-05-27 13:21:30');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `record_details`
 --
 
-DROP TABLE IF EXISTS `record_details`;
-CREATE TABLE IF NOT EXISTS `record_details` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `views` int DEFAULT '0',
-  `clicks` int DEFAULT '0',
-  `lynk_id` int DEFAULT NULL,
-  `total_sells` int DEFAULT '0',
-  `product_id` int DEFAULT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `record_details` (
+  `id` int(11) NOT NULL,
+  `views` int(11) DEFAULT 0,
+  `clicks` int(11) DEFAULT 0,
+  `lynk_id` int(11) DEFAULT NULL,
+  `total_sells` int(11) DEFAULT 0,
+  `product_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `record_details`
@@ -1174,46 +1257,41 @@ INSERT INTO `record_details` (`id`, `views`, `clicks`, `lynk_id`, `total_sells`,
 -- Table structure for table `stores`
 --
 
-DROP TABLE IF EXISTS `stores`;
-CREATE TABLE IF NOT EXISTS `stores` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` int UNSIGNED DEFAULT NULL,
-  `store_uid` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `store_logo` int UNSIGNED DEFAULT NULL,
-  `store_header_cover` int UNSIGNED DEFAULT NULL,
-  `brand_color` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `store_address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `store_email` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `storephoneno` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `business_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `whatsapp` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `website` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `instagram` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `gst_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `bankaccno` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `holder_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ifsc_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `bank_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `branch` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `pancardno` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `house_no` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `city` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `pincode` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `state` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `locality` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `status` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `accepting_orders` int NOT NULL DEFAULT '1',
-  `deleted` int NOT NULL DEFAULT '0',
+CREATE TABLE `stores` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `store_uid` varchar(1000) DEFAULT NULL,
+  `store_logo` int(10) UNSIGNED DEFAULT NULL,
+  `store_header_cover` int(10) UNSIGNED DEFAULT NULL,
+  `brand_color` varchar(20) DEFAULT NULL,
+  `store_address` text DEFAULT NULL,
+  `store_email` text DEFAULT NULL,
+  `storephoneno` text DEFAULT NULL,
+  `business_name` varchar(100) DEFAULT NULL,
+  `whatsapp` varchar(100) DEFAULT NULL,
+  `website` varchar(100) DEFAULT NULL,
+  `instagram` text DEFAULT NULL,
+  `gst_id` varchar(100) DEFAULT NULL,
+  `bankaccno` varchar(100) DEFAULT NULL,
+  `holder_name` varchar(100) DEFAULT NULL,
+  `ifsc_code` varchar(100) DEFAULT NULL,
+  `bank_name` varchar(100) DEFAULT NULL,
+  `branch` varchar(100) DEFAULT NULL,
+  `pancardno` varchar(100) DEFAULT NULL,
+  `house_no` varchar(100) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `pincode` varchar(100) DEFAULT NULL,
+  `state` varchar(100) DEFAULT NULL,
+  `locality` varchar(100) DEFAULT NULL,
+  `category` text DEFAULT NULL,
+  `status` text DEFAULT NULL,
+  `note` text DEFAULT NULL,
+  `accepting_orders` int(11) NOT NULL DEFAULT 1,
+  `deleted` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `stores_user_id_foreign` (`user_id`),
-  KEY `stores_store_logo_foreign` (`store_logo`),
-  KEY `stores_store_header_cover_foreign` (`store_header_cover`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `stores`
@@ -1228,27 +1306,22 @@ INSERT INTO `stores` (`id`, `user_id`, `store_uid`, `store_logo`, `store_header_
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `users` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(200) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone_no` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `photo_asset_id` int UNSIGNED DEFAULT NULL,
-  `cover_photo_asset_id` int UNSIGNED DEFAULT NULL,
-  `verification_code` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `is_deleted` int NOT NULL DEFAULT '0',
-  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `phone_no` text DEFAULT NULL,
+  `photo_asset_id` int(10) UNSIGNED DEFAULT NULL,
+  `cover_photo_asset_id` int(10) UNSIGNED DEFAULT NULL,
+  `verification_code` text DEFAULT NULL,
+  `is_deleted` int(11) NOT NULL DEFAULT 0,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `account_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `users_email_unique` (`email`),
-  KEY `users_photo_asset_id_foreign` (`photo_asset_id`),
-  KEY `users_cover_photo_asset_id_foreign` (`cover_photo_asset_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `account_type` varchar(191) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -1256,7 +1329,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `phone_no`, `photo_asset_id`, `cover_photo_asset_id`, `verification_code`, `is_deleted`, `remember_token`, `created_at`, `updated_at`, `account_type`) VALUES
 (9, NULL, 'itsdisposable008@gmail.com', NULL, '$2y$10$WsOLDSIoYZaTs43hb.ZU2OoJy8ZXKJlIU61I4c7nAx/t49CDUEWyS', '1234567890', NULL, NULL, NULL, 0, '0JeLU0oH5wdyDBjKGryh4X0av6G4MOtKDUE6E2xYIOx2f6Z7Ecem07m2tXk4VR2M', '2023-05-12 08:07:52', '2023-05-17 20:57:21', ''),
-(10, NULL, 'test@email.com', NULL, '$2y$10$cv02zf54APStCEnusyU2IOHbBejKgOeGpx638qrFgej.hySdiyh96', '2', NULL, NULL, NULL, 0, '765Baup0BiszBmL6D5jhff52BS4xTGHGaTzMkJ9BqJytSw4mtTQF7881JtobSEIh', '2023-05-19 08:06:29', '2023-05-19 13:54:22', 'customer');
+(10, NULL, 'test@email.com', NULL, '$2y$10$cv02zf54APStCEnusyU2IOHbBejKgOeGpx638qrFgej.hySdiyh96', '2', NULL, NULL, NULL, 0, 'r1AetMDyL1cyFhKSNSsPKMHwOUsXp7RMeetN0StjUpKy6IpkgffmfTSGL5bN1RhA', '2023-05-19 08:06:29', '2023-05-27 11:21:40', 'customer');
 
 -- --------------------------------------------------------
 
@@ -1264,26 +1337,405 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `ph
 -- Table structure for table `wishlist`
 --
 
-DROP TABLE IF EXISTS `wishlist`;
-CREATE TABLE IF NOT EXISTS `wishlist` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `lynk_id` bigint UNSIGNED NOT NULL,
-  `store_id` bigint UNSIGNED NOT NULL,
+CREATE TABLE `wishlist` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `lynk_id` bigint(20) UNSIGNED NOT NULL,
+  `store_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `wishlist_user_id_foreign` (`user_id`),
-  KEY `wishlist_lynk_id_foreign` (`lynk_id`),
-  KEY `wishlist_store_id_foreign` (`store_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `wishlist`
+-- Indexes for dumped tables
 --
 
-INSERT INTO `wishlist` (`id`, `user_id`, `lynk_id`, `store_id`, `created_at`, `updated_at`) VALUES
-(2, 10, 93, 10, '2023-05-19 13:03:30', '2023-05-19 13:03:30');
+--
+-- Indexes for table `assets`
+--
+ALTER TABLE `assets`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `catalogs`
+--
+ALTER TABLE `catalogs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `catalogs_sections`
+--
+ALTER TABLE `catalogs_sections`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `catalog_products`
+--
+ALTER TABLE `catalog_products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `catalog_products_product_id_foreign` (`product_id`),
+  ADD KEY `catalog_products_catalog_id_foreign` (`section_id`);
+
+--
+-- Indexes for table `catalog_section_products`
+--
+ALTER TABLE `catalog_section_products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `catalog_section_products_section_id_foreign` (`section_id`),
+  ADD KEY `catalog_section_products_product_id_foreign` (`product_id`);
+
+--
+-- Indexes for table `delivery_settings`
+--
+ALTER TABLE `delivery_settings`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `delivery_settings_store_id_foreign` (`store_id`);
+
+--
+-- Indexes for table `exchange_requests`
+--
+ALTER TABLE `exchange_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `exchange_requests_product_id_foreign` (`product_id`),
+  ADD KEY `exchange_requests_store_id_foreign` (`store_id`),
+  ADD KEY `exchange_requests_user_id_foreign` (`user_id`),
+  ADD KEY `exchange_requests_photo_id_foreign` (`photo_id`);
+
+--
+-- Indexes for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Indexes for table `follows`
+--
+ALTER TABLE `follows`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `follows_user_id_foreign` (`user_id`),
+  ADD KEY `follows_store_id_foreign` (`store_id`);
+
+--
+-- Indexes for table `login_activity`
+--
+ALTER TABLE `login_activity`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `login_activity_user_id_foreign` (`user_id`);
+
+--
+-- Indexes for table `lynks`
+--
+ALTER TABLE `lynks`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lynks_store_id_foreign` (`store_id`);
+
+--
+-- Indexes for table `lynk_products`
+--
+ALTER TABLE `lynk_products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lynk_products_lynk_id_foreign` (`lynk_id`),
+  ADD KEY `lynk_products_product_id_foreign` (`product_id`);
+
+--
+-- Indexes for table `measurements`
+--
+ALTER TABLE `measurements`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `measurements_user_id_foreign` (`user_id`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `notifications_user_id_foreign` (`user_id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `orders_user_id_foreign` (`user_id`),
+  ADD KEY `orders_store_id_foreign` (`store_id`),
+  ADD KEY `orders_lynk_id_foreign` (`lynk_id`),
+  ADD KEY `orders_measurement_id_foreign` (`measurement_id`);
+
+--
+-- Indexes for table `order_activity`
+--
+ALTER TABLE `order_activity`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_activity_order_id_foreign` (`order_id`);
+
+--
+-- Indexes for table `order_products`
+--
+ALTER TABLE `order_products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_products_order_id_foreign` (`order_id`),
+  ADD KEY `order_products_img_id_foreign` (`img_id`);
+
+--
+-- Indexes for table `order_requests`
+--
+ALTER TABLE `order_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_requests_user_id_foreign` (`user_id`),
+  ADD KEY `order_requests_store_id_foreign` (`store_id`);
+
+--
+-- Indexes for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Indexes for table `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
+
+--
+-- Indexes for table `phone_verifications`
+--
+ALTER TABLE `phone_verifications`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_images`
+--
+ALTER TABLE `product_images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_images_asset_id_foreign` (`asset_id`),
+  ADD KEY `product_images_product_id_foreign` (`product_id`);
+
+--
+-- Indexes for table `product_requests`
+--
+ALTER TABLE `product_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_requests_order_request_id_foreign` (`order_request_id`);
+
+--
+-- Indexes for table `record_details`
+--
+ALTER TABLE `record_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `stores`
+--
+ALTER TABLE `stores`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `stores_user_id_foreign` (`user_id`),
+  ADD KEY `stores_store_logo_foreign` (`store_logo`),
+  ADD KEY `stores_store_header_cover_foreign` (`store_header_cover`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `users_photo_asset_id_foreign` (`photo_asset_id`),
+  ADD KEY `users_cover_photo_asset_id_foreign` (`cover_photo_asset_id`);
+
+--
+-- Indexes for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `wishlist_user_id_foreign` (`user_id`),
+  ADD KEY `wishlist_lynk_id_foreign` (`lynk_id`),
+  ADD KEY `wishlist_store_id_foreign` (`store_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `assets`
+--
+ALTER TABLE `assets`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+
+--
+-- AUTO_INCREMENT for table `catalogs`
+--
+ALTER TABLE `catalogs`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `catalogs_sections`
+--
+ALTER TABLE `catalogs_sections`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `catalog_products`
+--
+ALTER TABLE `catalog_products`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `catalog_section_products`
+--
+ALTER TABLE `catalog_section_products`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `delivery_settings`
+--
+ALTER TABLE `delivery_settings`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `exchange_requests`
+--
+ALTER TABLE `exchange_requests`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `follows`
+--
+ALTER TABLE `follows`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `login_activity`
+--
+ALTER TABLE `login_activity`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `lynks`
+--
+ALTER TABLE `lynks`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
+
+--
+-- AUTO_INCREMENT for table `lynk_products`
+--
+ALTER TABLE `lynk_products`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+
+--
+-- AUTO_INCREMENT for table `measurements`
+--
+ALTER TABLE `measurements`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `order_activity`
+--
+ALTER TABLE `order_activity`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `order_products`
+--
+ALTER TABLE `order_products`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+
+--
+-- AUTO_INCREMENT for table `order_requests`
+--
+ALTER TABLE `order_requests`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT for table `phone_verifications`
+--
+ALTER TABLE `phone_verifications`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+
+--
+-- AUTO_INCREMENT for table `product_images`
+--
+ALTER TABLE `product_images`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+
+--
+-- AUTO_INCREMENT for table `product_requests`
+--
+ALTER TABLE `product_requests`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `record_details`
+--
+ALTER TABLE `record_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+
+--
+-- AUTO_INCREMENT for table `stores`
+--
+ALTER TABLE `stores`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -1353,7 +1805,8 @@ ALTER TABLE `notifications`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_lynk_id_foreign` FOREIGN KEY (`lynk_id`) REFERENCES `lynks` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `orders_lynk_id_foreign` FOREIGN KEY (`lynk_id`) REFERENCES `lynks` (`id`),
+  ADD CONSTRAINT `orders_measurement_id_foreign` FOREIGN KEY (`measurement_id`) REFERENCES `measurements` (`id`),
   ADD CONSTRAINT `orders_store_id_foreign` FOREIGN KEY (`store_id`) REFERENCES `stores` (`id`),
   ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
@@ -1368,7 +1821,7 @@ ALTER TABLE `order_activity`
 --
 ALTER TABLE `order_products`
   ADD CONSTRAINT `order_products_img_id_foreign` FOREIGN KEY (`img_id`) REFERENCES `assets` (`id`),
-  ADD CONSTRAINT `order_products_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `order_requests` (`id`);
+  ADD CONSTRAINT `order_products_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `order_requests`
@@ -1383,6 +1836,12 @@ ALTER TABLE `order_requests`
 ALTER TABLE `product_images`
   ADD CONSTRAINT `product_images_asset_id_foreign` FOREIGN KEY (`asset_id`) REFERENCES `assets` (`id`),
   ADD CONSTRAINT `product_images_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+
+--
+-- Constraints for table `product_requests`
+--
+ALTER TABLE `product_requests`
+  ADD CONSTRAINT `product_requests_order_request_id_foreign` FOREIGN KEY (`order_request_id`) REFERENCES `order_requests` (`id`);
 
 --
 -- Constraints for table `stores`

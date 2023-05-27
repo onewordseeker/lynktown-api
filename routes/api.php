@@ -89,9 +89,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/followstore', 'toggleFollow');
         Route::post('/togglewishlist', 'toggleWishlist');
         Route::post('/accessstore/{id}', 'accessStore');
-        Route::post('/addmeasurement', 'addMeasurement');
+        Route::post('/addmeasurement/{orderId}', 'addMeasurement');
         Route::post('/getsinglemeasurement/{id}', 'singleMeasurement');
         Route::post('/measurement/update/{measurement}', 'updateMeasurement');
         Route::post('/getallmeasurements', 'getAllMeasurement');
+        Route::post('/createcustomorder', 'createCustomOrder');
+        Route::post('/requestorder', 'requestOrder');
     });
 });

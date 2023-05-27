@@ -27,6 +27,8 @@ class Measurement extends Model
         'sleeve_length',
         'wrist',
         'size',
+        'front_image',
+        'back_image'
     ];
 
     public function user()
@@ -34,8 +36,8 @@ class Measurement extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function measurement()
+    public function order()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasOne(Order::class, 'measurement_id');
     }
 }

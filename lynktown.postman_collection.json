@@ -70,7 +70,7 @@
 						},
 						{
 							"key": "verification_code",
-							"value": "322912",
+							"value": "237658",
 							"type": "text"
 						}
 					]
@@ -209,7 +209,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user_id\": 10,\r\n    \"store_id\": 10,\r\n    \"lynk_id\": 95,\r\n    \"shipping_address\": \"123 Street, City\",\r\n    \"shipping_charges\": 10,\r\n    \"order_start_date\": \"2023-05-01\",\r\n    \"phone_no\": \"1234567890\",\r\n    \"note\": \"Sample note\",\r\n    \"status\": \"pending\",\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 59,\r\n            \"quantity\": 2,\r\n            \"size\": \"L\"\r\n            \r\n        },\r\n        {\r\n            \"product_id\": 60,\r\n            \"quantity\": 1,\r\n            \"size\": \"M\"\r\n            \r\n        }\r\n    ]\r\n}\r\n",
+					"raw": "{\r\n    \"user_id\": 10,\r\n    \"store_id\": 10,\r\n    \"lynk_id\": 97,\r\n    \"shipping_address\": \"123 Street, City\",\r\n    \"shipping_charges\": 10,\r\n    \"order_start_date\": \"2023-05-01\",\r\n    \"phone_no\": \"1234567890\",\r\n    \"note\": \"Sample note\",\r\n    \"status\": \"pending\",\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 59,\r\n            \"quantity\": 2,\r\n            \"size\": \"L\"\r\n            \r\n        },\r\n        {\r\n            \"product_id\": 60,\r\n            \"quantity\": 1,\r\n            \"size\": \"M\"\r\n            \r\n        }\r\n    ]\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -312,7 +312,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user_id\": 10,\r\n    \"store_id\": 10,\r\n    \"lynk_id\": 97,\r\n    \"shipping_address\": \"123 Street, City\",\r\n    \"shipping_charges\": 10,\r\n    \"order_start_date\": \"2023-05-01\",\r\n    \"phone_no\": \"1234567890\",\r\n    \"note\": \"Sample note\",\r\n    \"status\": \"pending\",\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 59,\r\n            \"quantity\": 2,\r\n            \"size\": \"L\"\r\n        },\r\n        {\r\n            \"product_id\": 60,\r\n            \"quantity\": 1,\r\n            \"size\": \"M\"\r\n        }\r\n    ],\r\n    \"measurements\": {\r\n        \"fitting\": \"Regular\",\r\n        \"gender\": \"Male\",\r\n        \"back\": 39,\r\n        \"front\": 40,\r\n        \"ankle\": 10,\r\n        \"calf\": 15,\r\n        \"full_length\": 42,\r\n        \"hip_round\": 38,\r\n        \"inseam\": 32,\r\n        \"thigh\": 20,\r\n        \"waist\": 34,\r\n        \"arm_hole\": 18,\r\n        \"chest\": 40,\r\n        \"neck\": 16,\r\n        \"shoulder\": 18,\r\n        \"sleeve_length\": 24,\r\n        \"wrist\": 8,\r\n        \"size\": \"M\"\r\n    }\r\n}\r\n",
+					"raw": "{\r\n    \"user_id\": 10,\r\n    \"store_id\": 10,\r\n    \"lynk_id\": 97,\r\n    \"shipping_address\": \"123 Street, City\",\r\n    \"shipping_charges\": 10,\r\n    \"order_start_date\": \"2023-05-01\",\r\n    \"phone_no\": \"1234567890\",\r\n    \"note\": \"Sample note\",\r\n    \"status\": \"pending\",\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 59,\r\n            \"quantity\": 2,\r\n            \"size\": \"L\"\r\n        },\r\n        {\r\n            \"product_id\": 60,\r\n            \"quantity\": 1,\r\n            \"size\": \"M\"\r\n        }\r\n    ]\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -345,7 +345,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"user_id\": 10,\r\n    \"measurements\": {\r\n        \"user_id\": 10,\r\n        \"fitting\": \"Regular\",\r\n        \"gender\": \"Male\",\r\n        \"back\": 39,\r\n        \"front\": 40,\r\n        \"ankle\": 10,\r\n        \"calf\": 15,\r\n        \"full_length\": 42,\r\n        \"hip_round\": 38,\r\n        \"inseam\": 32,\r\n        \"thigh\": 20,\r\n        \"waist\": 34,\r\n        \"arm_hole\": 18,\r\n        \"chest\": 40,\r\n        \"neck\": 16,\r\n        \"shoulder\": 18,\r\n        \"sleeve_length\": 24,\r\n        \"wrist\": 8,\r\n        \"size\": \"M\"\r\n    }\r\n}\r\n",
+					"raw": "{\"user_id\": 10,\r\n \"order_id\": 5,\r\n    \"measurements\": {\r\n        \"user_id\": 10,\r\n        \"fitting\": \"Regular\",\r\n        \"gender\": \"Male\",\r\n        \"back\": 39,\r\n        \"front\": 40,\r\n        \"ankle\": 10,\r\n        \"calf\": 15,\r\n        \"full_length\": 42,\r\n        \"hip_round\": 38,\r\n        \"inseam\": 32,\r\n        \"thigh\": 20,\r\n        \"waist\": 34,\r\n        \"arm_hole\": 18,\r\n        \"chest\": 40,\r\n        \"neck\": 16,\r\n        \"shoulder\": 18,\r\n        \"sleeve_length\": 24,\r\n        \"wrist\": 8,\r\n        \"size\": \"M\",\r\n        \"front_image\": \"url\",\r\n        \"back_image\": \"url\"\r\n    }\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -353,13 +353,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{server}}/customer/addmeasurement",
+					"raw": "{{server}}/customer/addmeasurement/24",
 					"host": [
 						"{{server}}"
 					],
 					"path": [
 						"customer",
-						"addmeasurement"
+						"addmeasurement",
+						"24"
 					]
 				}
 			},
@@ -388,14 +389,14 @@
 					]
 				},
 				"url": {
-					"raw": "{{server}}/customer/getsinglemeasurement/1",
+					"raw": "{{server}}/customer/getsinglemeasurement/9",
 					"host": [
 						"{{server}}"
 					],
 					"path": [
 						"customer",
 						"getsinglemeasurement",
-						"1"
+						"9"
 					]
 				}
 			},
@@ -422,7 +423,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{server}}/customer/measurement/update/2",
+					"raw": "{{server}}/customer/measurement/update/4",
 					"host": [
 						"{{server}}"
 					],
@@ -430,7 +431,7 @@
 						"customer",
 						"measurement",
 						"update",
-						"2"
+						"4"
 					]
 				}
 			},
@@ -459,6 +460,39 @@
 					"path": [
 						"customer",
 						"getallmeasurements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": 10,\r\n    \"store_id\": 10,\r\n    \"name\": \"abc\",\r\n    \"phone_no\": \"1234567890\",\r\n    \"note\": \"Sample note\",\r\n    \"business_id\": 2,\r\n    \"status\": \"pending\",\r\n    \"products\": [\r\n        {\r\n            \"product_image\": \"url1\",\r\n            \"product_url\": \"url2\"            \r\n        },\r\n        {\r\n            \"product_image\": \"url3\",\r\n            \"product_url\": \"url4\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/customer/requestorder",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"requestorder"
 					]
 				}
 			},
