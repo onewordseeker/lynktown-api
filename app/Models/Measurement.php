@@ -38,6 +38,6 @@ class Measurement extends Model
 
     public function order()
     {
-        return $this->hasOne(Order::class, 'measurement_id');
+        return $this->hasMany(Order::class, 'measurement_id');
     }
 }
