@@ -100,5 +100,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/getorders', 'getAllOrders');
         Route::post('/getspecificorder', 'getSpecificOrderDetails');
         Route::post('/getinvoice', 'getInvoiceDetails');
+        Route::post('/exchangerequest', 'exchangeRequest');
+        Route::post('/alterationrequest','alterRequest');
+        Route::post('/returnrequest', 'returnRequest');
     });
 });

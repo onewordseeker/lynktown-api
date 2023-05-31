@@ -70,7 +70,7 @@
 						},
 						{
 							"key": "verification_code",
-							"value": "237658",
+							"value": "848175",
 							"type": "text"
 						}
 					]
@@ -353,14 +353,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{server}}/customer/addmeasurement/24",
+					"raw": "{{server}}/customer/addmeasurement/30",
 					"host": [
 						"{{server}}"
 					],
 					"path": [
 						"customer",
 						"addmeasurement",
-						"24"
+						"30"
 					]
 				}
 			},
@@ -389,14 +389,14 @@
 					]
 				},
 				"url": {
-					"raw": "{{server}}/customer/getsinglemeasurement/9",
+					"raw": "{{server}}/customer/getsinglemeasurement/14",
 					"host": [
 						"{{server}}"
 					],
 					"path": [
 						"customer",
 						"getsinglemeasurement",
-						"9"
+						"14"
 					]
 				}
 			},
@@ -493,6 +493,297 @@
 					"path": [
 						"customer",
 						"requestorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Old Measurement",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "measurement_id",
+							"value": "9",
+							"type": "text"
+						},
+						{
+							"key": "order_id",
+							"value": "31",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/addoldmeasurement",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"addoldmeasurement"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Order Activity",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "order_activity",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "order_id",
+							"value": "35",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "completed",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/updateactivity",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"updateactivity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Orders",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "10",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/getorders",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"getorders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specific Order Details",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "order_id",
+							"value": "24",
+							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/getspecificorder",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"getspecificorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Invoice",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "order_id",
+							"value": "24",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/customer/getinvoice",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"getinvoice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Exchange Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": 10,\r\n    \"order_id\": 24,\r\n    \"store_id\": 10,\r\n    \"business_id\": 2,\r\n    \"product\": [\r\n        {\r\n            \"product_id\": 60,\r\n            \"reasons\": [\"Reason 1\", \"Reason 2\", \"Reason 3\"],\r\n            \"photo_urls\": [\"url1\", \"url2\", \"url3\"],\r\n            \"desc\": \"Some description 1\"\r\n        },\r\n        {\r\n            \"product_id\": 59,\r\n            \"reasons\": [\"Reason 4\", \"Reason 5\", \"Reason 6\"],\r\n            \"photo_urls\": [\"url4\", \"url5\", \"url6\"],\r\n            \"desc\": \"Some description 2\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/customer/exchangerequest",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"exchangerequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alteration Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": 10,\r\n    \"order_id\": 24,\r\n    \"store_id\": 10,\r\n    \"business_id\": 2,\r\n    \"product\": [\r\n        {\r\n            \"product_id\": 60,\r\n            \"reasons\": \"Reason\",\r\n            \"photo_urls\": [\"url1\", \"url2\", \"url3\"]\r\n        },\r\n        {\r\n            \"product_id\": 59,\r\n            \"reasons\": \"Reason Here!\",\r\n            \"photo_urls\": [\"url4\", \"url5\", \"url6\"]\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/customer/alterationrequest",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"alterationrequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Return Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": 10,\r\n    \"order_id\": 24,\r\n    \"store_id\": 10,\r\n    \"business_id\": 2,\r\n    \"product\": [\r\n        {\r\n            \"product_id\": 60,\r\n            \"reasons\": [\"Reason 1\", \"Reason 2\", \"Reason 3\"],\r\n            \"photo_urls\": [\"url1\", \"url2\", \"url3\"],\r\n            \"desc\": \"Some description 1\"\r\n        },\r\n        {\r\n            \"product_id\": 59,\r\n            \"reasons\": [\"Reason 4\", \"Reason 5\", \"Reason 6\"],\r\n            \"photo_urls\": [\"url4\", \"url5\", \"url6\"],\r\n            \"desc\": \"Some description 2\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/customer/returnrequest",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"customer",
+						"returnrequest"
 					]
 				}
 			},
