@@ -66,13 +66,14 @@ class AuthController extends Controller
         if (!Auth::attempt($data)) {
             return $this->error('Credentials not match', 401);
         }
-        if(auth()->user()->is_deleted) {
+        if (auth()->user()->is_deleted) {
             return $this->error('Your account is deleted, Please talk to the tech team.', 401);
         }
         // OTP verification enabled.
         $this->OTPMiddleware(null, $request);
 
         return $this->success([
+            'user_id' => auth()->user()->id,
             'token' => auth()->user()->createToken('API Token')->plainTextToken
         ]);
     }
@@ -86,7 +87,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return $this->error('Please check all the fields', 401);
         }
-        if(Hash::check($request->previous_password, auth()->user()->password)) {
+        if (Hash::check($request->previous_password, auth()->user()->password)) {
             $user = auth()->user();
             $_user = User::find($user->id);
 
@@ -99,8 +100,7 @@ class AuthController extends Controller
                 $_user
             ], 'Password updated successfully');
         } else {
-                return $this->error('Old password is invalid', 400, [
-            ]);
+            return $this->error('Old password is invalid', 400, []);
         }
     }
     public function setNewPassword(Request $request)
@@ -112,15 +112,13 @@ class AuthController extends Controller
             return $this->error('Please check all the fields', 401);
         }
         $_user = User::where(['remember_token' => $request->remember_token])->first();
-        if(!$_user) {
+        if (!$_user) {
             return $this->error('Please check all the fields', 401);
         }
         $_user->password = bcrypt($request->password);
         $_user->remember_token = null;
         $_user->save();
-        return $this->success([
-            
-        ], 'Password updated successfully');
+        return $this->success([], 'Password updated successfully');
     }
 
     public function forgetPassword(Request $request)
@@ -163,7 +161,8 @@ class AuthController extends Controller
     //     ];
     // }
 
-    public function test() {
+    public function test()
+    {
         $this->OTPMiddleware();
         echo 123;
     }
