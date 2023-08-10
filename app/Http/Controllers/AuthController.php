@@ -161,9 +161,14 @@ class AuthController extends Controller
     //     ];
     // }
 
-    public function test()
-    {
-        $this->OTPMiddleware();
-        echo 123;
+    public function test() {
+        \Artisan::call('cache:clear');
+       \Artisan::call('config:clear');
+       \Artisan::call('config:cache');
+       \Artisan::call('view:clear');
+       // $this->OTPMiddleware();
+        echo 'Cache clear';
     }
 }
+
+

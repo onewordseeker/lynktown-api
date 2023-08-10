@@ -69,8 +69,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/catalog/create', [CatalogController::class, 'store']);
     Route::post('/catalog/single/{id}', [CatalogController::class, 'show']);
     Route::post('/catalog/update/{id}', [CatalogController::class, 'update']);
-
-
+    
     Route::post('/test', [AuthController::class, 'test']);
 
     Route::post('/profile-edit', [UserController::class, 'profileEdit']);
