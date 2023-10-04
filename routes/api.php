@@ -8,8 +8,10 @@ use App\Http\Controllers\LynkController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +38,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     // Lynk Routes
+    Route::post('/category/list', [CategoryController::class, 'list']);
     Route::post('/lynk/list', [LynkController::class, 'list']);
     Route::post('/lynk/create', [LynkController::class, 'store']);
     Route::post('/lynk/single/{id}', [LynkController::class, 'show']);
+    Route::post('/lynk/delete/{id}', [LynkController::class, 'delete']);
     Route::post('/lynk/update', [LynkController::class, 'update']);
 
     // Store Routes
@@ -58,18 +62,26 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/product/create', [ProductController::class, 'store']);
     Route::post('/product/update', [ProductController::class, 'update']);
     Route::post('/product/single/{id}', [ProductController::class, 'show']);
+    Route::post('/TrashedSectionProduct/list', [ProductController::class, 'getTrashedSectionProduct']);
+    Route::post('/TrashedSectionProduct/restore', [ProductController::class, 'RestoreTrashedSectionProduct']);
 
     // Orders
     Route::post('/order/list', [OrderController::class, 'list']);
     Route::post('/order/update', [OrderController::class, 'update']);
     Route::post('/order/single/{id}', [OrderController::class, 'show']);
 
+    // Order Requests
+    Route::post('/order-request/list', [OrderRequestController::class, 'list']);
+    Route::post('/order-request/acceptedList', [OrderRequestController::class, 'acceptedList']);
+    Route::post('/order-request/update', [OrderRequestController::class, 'update']);
+    Route::post('/order-request/single/{id}', [OrderRequestController::class, 'show']);
+
     // Store Routes
     Route::post('/catalog/list', [CatalogController::class, 'list']);
     Route::post('/catalog/create', [CatalogController::class, 'store']);
     Route::post('/catalog/single/{id}', [CatalogController::class, 'show']);
     Route::post('/catalog/update/{id}', [CatalogController::class, 'update']);
-    
+
     Route::post('/test', [AuthController::class, 'test']);
 
     Route::post('/profile-edit', [UserController::class, 'profileEdit']);
@@ -81,6 +93,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
+    Route::post('customer/updaterequestorder', [CustomerController::class, 'updateReqOrder']);
     Route::prefix('/customer')->controller(CustomerController::class)->group(function () {
         Route::post('/feed', 'feed');
         Route::post('/lynk/{id}', 'lynk_products');
@@ -93,7 +106,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/measurement/update/{measurement}', 'updateMeasurement');
         Route::post('/getallmeasurements', 'getAllMeasurement');
         Route::post('/createcustomorder', 'createCustomOrder');
-        Route::post('/requestorder', 'requestOrder');
+        Route::post('/createrequestorder', 'createrequestorder');
         Route::post('/addoldmeasurement','addOldMeasurement');
         Route::post('/updateactivity', 'updateActivity');
         Route::post('/getorders', 'getAllOrders');

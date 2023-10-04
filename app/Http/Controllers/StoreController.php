@@ -8,7 +8,10 @@ use App\Models\Asset;
 use App\Models\CatalogSectionProduct;
 use App\Models\Lynk;
 use App\Models\CatalogsSection;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductCategories;
+use App\Models\StoreCategory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -19,10 +22,10 @@ class StoreController extends Controller
     {
         $this->validateRequest();
         $store = vendorStore();
-        $lynks = Store::where(['user_id' => Auth()->user()->id])->with(['user', 'logo', 'cover'])->first();
-        return $this->success([
-            $lynks
-        ]);
+        $lynks = Store::where(['user_id' => Auth()->user()->id])
+            ->with(['user', 'logo', 'cover'])
+            ->first();
+        return $this->success([$lynks]);
     }
 
     // Create a new store
@@ -35,8 +38,8 @@ class StoreController extends Controller
             'brand_color' => 'string',
             'store_email' => 'email',
             'storephoneno' => 'string',
-            'category' => 'string',
-            'note' => 'nullable|string',
+            'category' => 'nullable|string',
+            'about_us' => 'nullable|string',
             'accepting_orders' => '',
             'user_id' => 'nullable|string',
             'business_name' => 'nullable|string',
@@ -57,27 +60,28 @@ class StoreController extends Controller
             'state' => 'nullable',
             'locality' => 'nullable',
             'brand_color' => 'nullable',
+            'store_categories' => 'nullable|array',
         ]);
-
         if ($validatedData->fails()) {
             $message = $validatedData->errors()->first();
             return $this->error($message, 401);
         }
         $store_uid = Str::random(12);
+
         do {
             $_store = Store::where(['store_uid' => $store_uid])->first();
         } while ($_store);
         // OTP verification enabled.
         // $this->OTPMiddleware(null, $request);
-
         // Create a new Store model instance
-        $store = new Store;
+        $store = new Store();
         $store->user_id = auth()->user()->id;
         $store->store_uid = $store_uid;
 
         foreach ($validatedData->validated() as $key => $value) {
-            if (($key == 'store_logo') || $key == 'store_header_cover')
+            if ($key == 'store_logo' || $key == 'store_header_cover' || $key == 'store_categories') {
                 continue;
+            }
             $store->$key = $value;
         }
         // Upload store logo image
@@ -91,13 +95,18 @@ class StoreController extends Controller
             $asset = Asset::create(['url' => $request->store_header_cover, 'type' => 'image']);
             $store->store_header_cover = $asset->id;
         }
-        // Upload store header cover image
-
-        // Save the new Store instance to the database
         $store->save();
-        return $this->success([
-            $store
-        ], 'Store was created successfully');
+        if (isset($request->store_categories)) {
+            foreach ($request->input('store_categories', []) as $categoryId) {
+                $store_category = StoreCategory::create([
+                    'category_id' => $categoryId,
+                    'store_id' => $store->id,
+                ]);
+            }
+        } else {
+            return 'categories are not created';
+        }
+        return $this->success([$store], 'Store was created successfully');
     }
 
     // Update an existing store
@@ -142,7 +151,6 @@ class StoreController extends Controller
             $message = $validatedData->errors()->first();
             return $this->error($message, 401);
         }
-
         // OTP verification enabled.
         // $this->OTPMiddleware(null, $request);
 
@@ -150,8 +158,9 @@ class StoreController extends Controller
         $store = Store::find($store->id);
 
         foreach ($validatedData->validated() as $key => $value) {
-            if (($key == 'store_logo') || $key == 'store_header_cover')
+            if ($key == 'store_logo' || $key == 'store_header_cover') {
                 continue;
+            }
             $store->$key = $value;
         }
         // Upload store logo image
@@ -165,13 +174,12 @@ class StoreController extends Controller
             $asset = Asset::create(['url' => $request->store_header_cover, 'type' => 'image']);
             $store->store_header_cover = $asset->id;
         }
+
         // Save the new Store instance to the database
         $store->save();
-        return $this->success([
-            $store
-        ], 'Store was updated successfully');
+        return $this->success([$store], 'Store was updated successfully');
     }
-
+    ///products in catelog, total orders, total earnings, total-lynk
     // Get a single store by ID
     public function show(Request $request)
     {
@@ -180,10 +188,18 @@ class StoreController extends Controller
         if (!$store) {
             return $this->error('Please complete your business profile.', 401);
         }
-        $store = Store::with(['user', 'logo', 'cover'])->find($store->id);
-        return $this->success([
-            $store
-        ]);
+        $store = Store::with(['user', 'logo', 'cover', 'products', 'lynks', 'orders'])->find($store->id);
+        //total lynks
+        $totalLynks = $store->lynks->count();
+        $totalProducts = $store->products->where('catalog_enabled', 1)->count();
+        $totalOrders = $store->orders->count();
+        $totalEarnings = $store->orders->sum('subtotal_price');
+        $store->total_links = $totalLynks;
+        $store->total_products = $totalProducts;
+        $store->total_orders = $totalOrders;
+        $store->total_earnings = $totalEarnings;
+
+        return $this->success([$store]);
     }
 
     public function details()
@@ -193,13 +209,13 @@ class StoreController extends Controller
         if (!$store) {
             return $this->error('Please complete your business profile.', 401);
         }
-        $lynks = Lynk::where(['lynks.store_id' => $store->id])->with(['products.product.record', 'record', 'products.product.images.productImage'])->get();
+        $lynks = Lynk::where(['lynks.store_id' => $store->id])
+            ->with(['products.product.record', 'record', 'products.product.images.productImage'])
+            ->get();
         $_lynks = [];
         $_lynks['store'] = $store;
         $_lynks['lynks'] = $lynks;
-        return $this->success([
-            $_lynks
-        ]);
+        return $this->success([$_lynks]);
     }
 
     public function sectionCreate(Request $request)
@@ -217,9 +233,7 @@ class StoreController extends Controller
             return $this->error($message, 401);
         }
         $section = CatalogsSection::create(['store_id' => $store->id, 'name' => $validatedData->validated()['name']]);
-        return $this->success([
-            $section
-        ], 'Section created successfully');
+        return $this->success([$section], 'Section created successfully');
     }
 
     public function sectionList(Request $request)
@@ -233,14 +247,18 @@ class StoreController extends Controller
         $_sections = CatalogsSection::where(['catalogs_sections.store_id' => $store->id])->get();
         $sections = [];
         $index = 0;
-        foreach($_sections as $section) {
-            $products = CatalogSectionProduct::where(['section_id' => $section->id])->join('products', ['products.id' => 'catalog_section_products.product_id'])->get();
+        foreach ($_sections as $section) {
+            $products = CatalogSectionProduct::where(['section_id' => $section->id])
+                ->join('products', ['products.id' => 'catalog_section_products.product_id'])
+                ->select(['products.*', 'catalog_section_products.*', 'catalog_section_products.id as pro_section_id'])
+                ->get();
             $sections[] = $section;
             $sections[$index]->products = $products;
             $index++;
         }
-        return $this->success([
-            $sections
-        ], 'Section list');
+        return $this->success([$sections], 'Section list');
     }
+
+       
+
 }

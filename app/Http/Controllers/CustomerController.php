@@ -17,12 +17,13 @@ use Illuminate\Http\Request;
 use App\Models\ProductImages;
 use App\Models\OrderActivity;
 use App\Models\ProductRequest;
+use App\Models\RecordDetails;
+use App\Models\LynkProduct;
 use App\Models\ExchangeRequest;
 use App\Models\AlterationRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\DefectedProductPhoto;
 use Illuminate\Support\Facades\Validator;
-
 
 class CustomerController extends Controller
 {
@@ -50,6 +51,50 @@ class CustomerController extends Controller
             'lynks' => $lynks,
         ]);
     }
+    public function updateReqOrder(Request $request)
+    {
+        $store = Store::where(['user_id' => auth()->user()->id])->first();
+
+        if (!$store) {
+            return $this->error('order could not updated', 401);
+        }
+        $storeId = $store->id;
+        $validatedData = $request->validate([
+            'order_id' => 'required',
+        ]);
+        $orderId = $validatedData['order_id'];
+        $requestOrder = OrderRequest::where('id', $orderId)->first();
+        $requestOrderId = $requestOrder->id;
+        $requestProduct = ProductRequest::where('order_request_id', $requestOrderId)->get();
+       // dd($requestProduct);
+        $lynk = lynk::create(['store_id' => $storeId]);
+        $lynkId = $lynk->id;
+        foreach ($requestProduct as $product) {
+            $asset = Asset::create(['url' => $product->product_image, 'type' => 'image']);
+            $prod = Product::create([
+                'post_link'=> $product->product_link,
+                'img_id'=> $asset->id,
+            ]);
+            RecordDetails::create(['lynk_id' => $lynkId, 'product_id' => $prod->id]);
+            LynkProduct::create(['lynk_id' => $lynkId, 'product_id' => $prod->id, 'status' => 1]);
+        }
+
+        $totalprice = ProductRequest::where('order_request_id', $requestOrderId)->sum('total_price');
+        if ($requestOrder) {
+            $order = Order::create([
+                'user_id' => $requestOrder->user_id,
+                'store_id' => $requestOrder->store_id,
+                'lynk_id' => $lynkId,
+                'total_price' => $totalprice,
+                'order_start_date' => $requestOrder->created_at,
+                'customer_name' => $requestOrder->full_name,
+                'phone_no' => $requestOrder->phone_no,
+                'note' => $requestOrder->note,
+                'status' => $requestOrder->status,
+            ]);
+        }
+        return response()->json(['message' => 'Order placed successfully']);
+    }
 
     public function lynk_products($id)
     {
@@ -59,10 +104,7 @@ class CustomerController extends Controller
         $product_ids = $lynk->products->pluck('product_id')->toArray();
         $products = Product::whereIn('id', $product_ids)->get();
 
-        return $this->success([
-            $lynk,
-            $products
-        ]);
+        return $this->success([$lynk, $products]);
     }
 
     public function toggleWishlist(Request $request)
@@ -165,14 +207,15 @@ class CustomerController extends Controller
                 // Set other fields as needed
                 $orderProduct->save();
 
-
                 // Store the newly created order product ID
                 $orderProductIds[] = $orderProduct->id;
             }
 
             // Check if passed product IDs exist in the lynk
             $lynkProducts = $lynk->products->pluck('product_id')->toArray();
-            $requestedProductIds = collect($products)->pluck('product_id')->toArray();
+            $requestedProductIds = collect($products)
+                ->pluck('product_id')
+                ->toArray();
             $missingProducts = array_diff($requestedProductIds, $lynkProducts);
             if (!empty($missingProducts)) {
                 return response()->json(['error' => 'Some products are not available in the lynk'], 400);
@@ -227,12 +270,15 @@ class CustomerController extends Controller
             $products = $store->products()->paginate(10);
             $wishlistCount = $store->wishlist()->count();
 
-            return response()->json([
-                'store' => $store,
-                'lynks' => $lynks,
-                'products' => $products,
-                'likes' => $wishlistCount,
-            ], 200);
+            return response()->json(
+                [
+                    'store' => $store,
+                    'lynks' => $lynks,
+                    'products' => $products,
+                    'likes' => $wishlistCount,
+                ],
+                200,
+            );
         } catch (\Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -272,8 +318,6 @@ class CustomerController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-
     // add measurement
 
     public function addMeasurement(Request $request, $orderId)
@@ -288,7 +332,6 @@ class CustomerController extends Controller
 
             $userId = $validatedData['user_id'];
             $measurementData = $validatedData['measurements'];
-
 
             $user = User::findOrFail($userId);
             $measurement = $user->measurement()->create($measurementData);
@@ -307,8 +350,6 @@ class CustomerController extends Controller
         }
     }
 
-
-
     public function singleMeasurement($id)
     {
         // Retrieve the measurement ID from the form data
@@ -324,10 +365,6 @@ class CustomerController extends Controller
         }
     }
 
-
-
-
-
     public function updateMeasurement(Request $request, Measurement $measurement)
     {
         $measurementData = $request->input('measurement');
@@ -341,7 +378,6 @@ class CustomerController extends Controller
         }
     }
 
-
     public function getAllMeasurement()
     {
         $this->validateRequest();
@@ -352,8 +388,6 @@ class CustomerController extends Controller
 
         return response()->json(['measurements' => $measurements]);
     }
-
-
 
     public function createCustomOrder(Request $request)
     {
@@ -403,7 +437,9 @@ class CustomerController extends Controller
 
             // Check if passed product IDs exist in the lynk
             $lynkProducts = $lynk->products->pluck('product_id')->toArray();
-            $requestedProductIds = collect($products)->pluck('product_id')->toArray();
+            $requestedProductIds = collect($products)
+                ->pluck('product_id')
+                ->toArray();
             $missingProducts = array_diff($requestedProductIds, $lynkProducts);
             if (!empty($missingProducts)) {
                 return response()->json(['error' => 'Some products are not available in the lynk'], 400);
@@ -411,7 +447,29 @@ class CustomerController extends Controller
 
             // Set the customer name from the user
             $customerName = $user->name;
-
+            $measurement = new Measurement();
+            $measurement->user_id = $userId;
+            $measurement->fitting = $request->input('fitting');
+            $measurement->gender = $request->input('gender');
+            $measurement->back = $request->input('back');
+            $measurement->front = $request->input('front');
+            $measurement->ankle = $request->input('ankle');
+            $measurement->calf = $request->input('calf');
+            $measurement->full_length = $request->input('full_length');
+            $measurement->hip_round = $request->input('hip_round');
+            $measurement->inseam = $request->input('inseam');
+            $measurement->thigh = $request->input('thigh');
+            $measurement->waist = $request->input('waist');
+            $measurement->arm_hole = $request->input('arm_hole');
+            $measurement->chest = $request->input('chest');
+            $measurement->neck = $request->input('neck');
+            $measurement->shoulder = $request->input('shoulder');
+            $measurement->sleeve_length = $request->input('sleeve_length');
+            $measurement->wrist = $request->input('wrist');
+            $measurement->size = $request->input('size');
+            $measurement->front_image = $request->input('front_image');
+            $measurement->back_image = $request->input('back_image');
+            $measurement->save();
             $order->user()->associate($user);
             $order->store()->associate($store);
             $order->lynk()->associate($lynk);
@@ -424,6 +482,7 @@ class CustomerController extends Controller
             $order->phone_no = $phoneNo;
             $order->note = $note;
             $order->status = $status;
+            $order->measurement_id = $measurement->id;
             $order->save();
 
             $lastId = $order->id;
@@ -442,7 +501,6 @@ class CustomerController extends Controller
             $orderActivity->status = $status;
             $orderActivity->note = $note;
 
-
             // DB::connection()->enableQueryLog();
 
             $orderActivity->save();
@@ -457,8 +515,7 @@ class CustomerController extends Controller
         }
     }
 
-
-    public function requestorder(Request $request)
+    public function createrequestorder(Request $request)
     {
         try {
             $validatedData = $request->validate([
@@ -504,7 +561,6 @@ class CustomerController extends Controller
         }
     }
 
-
     public function addOldMeasurement(Request $request)
     {
         // Retrieve the measurement ID and order ID from the form data
@@ -532,14 +588,12 @@ class CustomerController extends Controller
         return response()->json(['error' => 'Measurement or order not found'], 404);
     }
 
-
-
     public function updateActivity(Request $request)
     {
         try {
             $validatedData = $request->validate([
                 'order_id' => 'required',
-                'status' => 'required'
+                'status' => 'required',
             ]);
 
             $orderId = $validatedData['order_id'];
@@ -563,9 +617,6 @@ class CustomerController extends Controller
         }
     }
 
-
-
-
     public function getAllOrders()
     {
         try {
@@ -579,16 +630,15 @@ class CustomerController extends Controller
                 // Retrieve the products related to the order_id
                 $products = OrderProduct::where('order_id', $order->id)->get();
 
-
-
                 // Retrieve the product images for each product
                 foreach ($products as $product) {
                     $productImg = ProductImages::where('product_id', $product->product_id)->get();
                     $product->images = $productImg;
 
-
                     foreach ($productImg as $image) {
-                        $asset = Asset::where('id', $image->asset_id)->select('url')->first();
+                        $asset = Asset::where('id', $image->asset_id)
+                            ->select('url')
+                            ->first();
                         $image->url = $asset ? $asset->url : null;
                     }
                 }
@@ -601,7 +651,6 @@ class CustomerController extends Controller
                 $order->productCount = $totalQuantity;
             }
 
-
             // Return the orders with products and count in JSON format
             return response()->json($orders);
         } catch (\Throwable $e) {
@@ -609,9 +658,6 @@ class CustomerController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-
-
 
     public function getAllReadyMadeOrders()
     {
@@ -620,22 +666,24 @@ class CustomerController extends Controller
             $user = auth()->user();
 
             // Retrieve the orders associated with the user
-            $orders = $user->orders()->whereNull('measurement_id')->get();
+            $orders = $user
+                ->orders()
+                ->whereNull('measurement_id')
+                ->get();
 
             foreach ($orders as $order) {
                 // Retrieve the products related to the order_id
                 $products = OrderProduct::where('order_id', $order->id)->get();
-
-
 
                 // Retrieve the product images for each product
                 foreach ($products as $product) {
                     $productImg = ProductImages::where('product_id', $product->product_id)->get();
                     $product->images = $productImg;
 
-
                     foreach ($productImg as $image) {
-                        $asset = Asset::where('id', $image->asset_id)->select('url')->first();
+                        $asset = Asset::where('id', $image->asset_id)
+                            ->select('url')
+                            ->first();
                         $image->url = $asset ? $asset->url : null;
                     }
                 }
@@ -648,7 +696,6 @@ class CustomerController extends Controller
                 $order->productCount = $totalQuantity;
             }
 
-
             // Return the orders with products and count in JSON format
             return response()->json($orders);
         } catch (\Throwable $e) {
@@ -656,8 +703,6 @@ class CustomerController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-
 
     public function getAllCustomMadeOrders()
     {
@@ -666,22 +711,24 @@ class CustomerController extends Controller
             $user = auth()->user();
 
             // Retrieve the orders associated with the user
-            $orders = $user->orders()->whereNotNull('measurement_id')->get();
+            $orders = $user
+                ->orders()
+                ->whereNotNull('measurement_id')
+                ->get();
 
             foreach ($orders as $order) {
                 // Retrieve the products related to the order_id
                 $products = OrderProduct::where('order_id', $order->id)->get();
-
-
 
                 // Retrieve the product images for each product
                 foreach ($products as $product) {
                     $productImg = ProductImages::where('product_id', $product->product_id)->get();
                     $product->images = $productImg;
 
-
                     foreach ($productImg as $image) {
-                        $asset = Asset::where('id', $image->asset_id)->select('url')->first();
+                        $asset = Asset::where('id', $image->asset_id)
+                            ->select('url')
+                            ->first();
                         $image->url = $asset ? $asset->url : null;
                     }
                 }
@@ -694,7 +741,6 @@ class CustomerController extends Controller
                 $order->productCount = $totalQuantity;
             }
 
-
             // Return the orders with products and count in JSON format
             return response()->json($orders);
         } catch (\Throwable $e) {
@@ -702,7 +748,6 @@ class CustomerController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
 
     public function getSpecificOrderDetails(Request $request)
     {
@@ -719,7 +764,10 @@ class CustomerController extends Controller
             $orderId = $request->input('order_id');
 
             // Retrieve the specified order associated with the user
-            $order = $user->orders()->where('id', $orderId)->first();
+            $order = $user
+                ->orders()
+                ->where('id', $orderId)
+                ->first();
 
             if (!$order) {
                 return response()->json(['error' => 'Order not found'], 404);
@@ -732,15 +780,15 @@ class CustomerController extends Controller
             foreach ($products as $product) {
                 $productImages = ProductImages::where('product_id', $product->product_id)->get();
 
-
                 foreach ($productImages as $image) {
-                    $asset = Asset::where('id', $image->asset_id)->select('url')->first();
+                    $asset = Asset::where('id', $image->asset_id)
+                        ->select('url')
+                        ->first();
                     $image->url = $asset ? $asset->url : null;
                 }
 
                 $product->images = $productImages;
             }
-
 
             // Sum up the quantity of products
             $totalQuantity = $products->sum('quantity');
@@ -757,7 +805,6 @@ class CustomerController extends Controller
         }
     }
 
-
     public function getInvoiceDetails(Request $request)
     {
         try {
@@ -773,7 +820,10 @@ class CustomerController extends Controller
             $orderId = $request->input('order_id');
 
             // Retrieve the specified order associated with the user
-            $order = $user->orders()->where('id', $orderId)->first();
+            $order = $user
+                ->orders()
+                ->where('id', $orderId)
+                ->first();
 
             if (!$order) {
                 return response()->json(['error' => 'Order not found'], 404);
@@ -786,16 +836,16 @@ class CustomerController extends Controller
             foreach ($products as $product) {
                 $productImages = ProductImages::where('product_id', $product->product_id)->get();
 
-
                 foreach ($productImages as $image) {
-                    $asset = Asset::where('id', $image->asset_id)->select('url')->first();
+                    $asset = Asset::where('id', $image->asset_id)
+                        ->select('url')
+                        ->first();
                     $image->url = $asset ? $asset->url : null;
                 }
 
                 $product->singleproductTotalPrice = $product->quantity * $product->price;
                 $product->images = $productImages;
             }
-
 
             // Sum up the quantity of products
             $totalQuantity = $products->sum('quantity');
@@ -824,7 +874,7 @@ class CustomerController extends Controller
                 'product.*.product_id' => 'required',
                 'product.*.reasons' => 'required|array',
                 'product.*.photo_urls' => 'required|array',
-                'product.*.desc' => 'required'
+                'product.*.desc' => 'required',
             ]);
 
             $status = 'Exchange Requested';
@@ -882,8 +932,6 @@ class CustomerController extends Controller
         }
     }
 
-
-
     public function alterRequest(Request $request)
     {
         try {
@@ -907,13 +955,11 @@ class CustomerController extends Controller
                 $reasons = $productData['reasons'];
                 $photoUrls = $productData['photo_urls'];
 
-
                 // // Check if an alteration request already exists for the product
                 // $existingAlteration = AlterationRequest::where('product_id', $productId)->exists();
                 // if ($existingAlteration) {
                 //     return response()->json(['message' => 'Alteration request already exists for the product'], 400);
                 // }
-
 
                 // Create a new exchange request
                 $alter = new AlterationRequest();
@@ -964,7 +1010,7 @@ class CustomerController extends Controller
                 'product.*.product_id' => 'required',
                 'product.*.reasons' => 'required|array',
                 'product.*.photo_urls' => 'required|array',
-                'product.*.desc' => 'required'
+                'product.*.desc' => 'required',
             ]);
 
             $products = $validatedData['product'];
@@ -985,7 +1031,6 @@ class CustomerController extends Controller
         }
     }
 
-
     public function cancelAlteration(Request $request)
     {
         try {
@@ -994,7 +1039,7 @@ class CustomerController extends Controller
                 'order_id' => 'required',
                 'product' => 'required|array',
                 'product.*.product_id' => 'required',
-                'product.*.status' => 'required'
+                'product.*.status' => 'required',
             ]);
 
             $products = $validatedData['product'];

@@ -16,7 +16,7 @@ class OrderController extends Controller
         if (!$store) {
             return $this->error('Please complete your business profile.', 401);
         }
-        $orders = Order::where(['store_id' => $store->id])->get();
+        $orders = Order::where(['store_id' => $store->id])->with('lynk.products.product.images.productImage','measurement','user')->orderBy('created_at', 'desc')->paginate(5);
         return $this->success([
             $orders
         ]);
@@ -34,7 +34,7 @@ class OrderController extends Controller
             'customer_name' => 'nullable|string',
             'phone_no' => 'nullable|string',
             'note' => 'nullable|string',
-            'status' => 'nullable',
+            'status' => 'nullable', // pending measurement, processing, incourier, delivered, alteration(return), exchange, rejected, cancelled
             'order_id' => 'required',
         ]);
 
@@ -44,7 +44,7 @@ class OrderController extends Controller
         }
         // Create a new Store model instance
         $order = new Order;
-        
+dd($order);
         foreach ($validatedData->validated() as $key => $value) {
             $order->$key = $value;
         }

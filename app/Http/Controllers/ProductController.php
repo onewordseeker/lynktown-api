@@ -8,6 +8,7 @@ use App\Models\CatalogProduct;
 use App\Models\CatalogSectionProduct;
 use App\Models\Catalog;
 use App\Models\Asset;
+use App\Models\ProductCategories;
 use App\Models\Store;
 use App\Models\ProductImages;
 use App\Models\RecordDetails;
@@ -20,10 +21,11 @@ class ProductController extends Controller
     {
         $this->validateRequest();
         $store = vendorStore();
-        $lynks = Product::where(['store_id' => $store->id])->with(['cover'])->get();
-        return $this->success([
-            $lynks
-        ]);
+        $lynks = Product::where(['store_id' => $store->id])
+            ->with(['cover'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(50);
+        return $this->success([$lynks]);
     }
 
     // Create a new store
@@ -37,12 +39,17 @@ class ProductController extends Controller
             return $this->error($message, 401);
         }
         $result = $this->create($request, $validatedData);
+        if (isset($request->product_images)) {
+            foreach ($request->input('product_images', []) as $image) {
+                $asset = Asset::create(['url' => $image, 'type' => 'image']);
+                ProductImages::create(['product_id' => $result->id, 'asset_id' => $asset->id]);
+            }
+        } else {
+        }
         if (!$result) {
             return $this->error('Product could not created', 401);
         }
-        return $this->success([
-            $result
-        ], 'Product was created successfully');
+        return $this->success([$result], 'Product was created successfully');
     }
     public function createCatalogProduct(Request $request)
     {
@@ -62,7 +69,7 @@ class ProductController extends Controller
         CatalogProduct::create([
             'catalog_id' => $request->catalog_id,
             'product_id' => $product->id,
-            'status' => 1
+            'status' => 1,
         ]);
     }
     public function addToCatalog(Request $request)
@@ -101,9 +108,7 @@ class ProductController extends Controller
         if ($flag) {
             $message = 'Some Products could not added to catalog.';
         }
-        return $this->success([
-            []
-        ], $message);
+        return $this->success([[]], $message);
     }
 
     public function verifyData($request)
@@ -119,16 +124,17 @@ class ProductController extends Controller
             'return_available' => 'string',
             'categories' => 'string',
             'product_type' => 'required|string',
+            'product_images' => 'nullable|array',
         ]);
         return $validatedData;
     }
 
-    public function create(Request $request,  $validatedData)
+    public function create(Request $request, $validatedData)
     {
         $store = vendorStore();
         // Validate the request data
         // Create a new Store model instance
-        $create = new Product;
+        $create = new Product();
         $create->store_id = $store->id;
         $create->quantity = $validatedData->validated()['quantity'];
         $create->price = $validatedData->validated()['price'];
@@ -136,9 +142,10 @@ class ProductController extends Controller
         $create->name = $validatedData->validated()['name'];
         $create->size = $validatedData->validated()['size'];
         $create->exchange_available = $validatedData->validated()['exchange_available'];
-        $create->return_available = $validatedData->validated()['return_available'];
-        $create->categories = $validatedData->validated()['categories'];
+        // $create->return_available = $validatedData->validated()['return_available'];
+        // $create->categories = $validatedData->validated()['categories'];
         $create->product_type = $validatedData->validated()['product_type'];
+        //  $create->product_ima = $validatedData->validated()['product_type'];
 
         // OTP verification enabled.
         // $this->OTPMiddleware();
@@ -161,7 +168,7 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $store = Store::where(['user_id' => auth()->user()->id])->first();
-        if ($store) {
+        if (!$store) {
             return $this->error('Product could not updated', 401);
         }
         // Validate the request data
@@ -209,34 +216,90 @@ class ProductController extends Controller
         }
         // Save the new Store instance to the database
         $update->save();
-        return $this->success([
-            $update
-        ], 'Product was updated successfully');
+        return $this->success([$update], 'Product was updated successfully');
     }
 
     // Get a single store by ID
     public function show($id)
     {
         $store = Product::with(['cover'])->find($id);
-        return $this->success([
-            $store
-        ]);
+        return $this->success([$store]);
     }
 
     public function deleteFromCatalog(Request $request)
     {
         $store = Store::where(['user_id' => auth()->user()->id])->first();
-        if ($store) {
+        if (!$store) {
             return $this->error('Product could not removed', 401);
         }
-        $product = CatalogProduct::where(['product_id' => $request->product_id, 'store_id' => $store->store_id])->get();
-        if ($product) {
-            $product->each->delete();
-            return $this->success([
-                Product::where(['store_id' => $request->store_id])->with(['cover'])->get()
-            ], 'Product removed from catalog');
-        } else {
+        $productIdsToDelete = $request->product_section_id;
+        if (isset($productIdsToDelete)) {
+            $productId = is_array($productIdsToDelete) ? $productIdsToDelete : json_decode($productIdsToDelete);
+            $sectionProductRecords = CatalogSectionProduct::whereIn('id', $productId)->get();
+            if (!$sectionProductRecords->isEmpty()) {
+                // Delete the found records
+                $sectionProductRecords->each(function ($record) {
+                    $record->status = 0;
+                    $record->save();
+                    $record->delete();
+                });
+                return response()->json(['message' => 'Products deleted Successfully']);
+            } else {
+                return response()->json(['message' => 'No matching IDs found'], 404);
+            }
+        }
+    }
+    //previous logic for delete, there are some changes required so we ignore that function
+    // public function deleteFromCatalog(Request $request)
+    // {
+    //     $store = Store::where(['user_id' => auth()->user()->id])->first();
+    //     if ($store) {
+    //         return $this->error('Product could not removed', 401);
+    //     }
+    //     $product = CatalogProduct::where(['product_id' => $request->product_id, 'store_id' => $store->store_id])->get();
+    //     if ($product) {
+    //         $product->each->delete();
+    //         return $this->success([
+    //             Product::where(['store_id' => $request->store_id])->with(['cover'])->get()
+    //         ], 'Product removed from catalog');
+    //     } else {
+    //         return $this->error('Product could not removed', 401);
+    //     }
+    // }
+    public function getTrashedSectionProduct()
+    {
+        $softDeletedRecords = CatalogSectionProduct::onlyTrashed()
+            ->with('product.images.productImage')
+            ->get();
+
+        return $this->success([
+            'DeletdProducts' => $softDeletedRecords,
+        ]);
+    }
+    public function RestoreTrashedSectionProduct(Request $request)
+    {
+        $store = Store::where(['user_id' => auth()->user()->id])->first();
+        if (!$store) {
             return $this->error('Product could not removed', 401);
+        }
+        $softDeletedProductIds = $request->product_section_id;
+        if (isset($softDeletedProductIds)) {
+            $productIdsToRestore = is_array($softDeletedProductIds) ? $softDeletedProductIds : json_decode($softDeletedProductIds);
+            $softDeletedRecords = CatalogSectionProduct::onlyTrashed()
+                ->whereIn('id', $productIdsToRestore)
+                ->get();
+            if ($softDeletedRecords->isEmpty()) {
+                return response()->json(['message' => 'No soft-deleted records to restore'], 404);
+            }
+            foreach ($softDeletedRecords as $record) {
+                $record->status = 1;
+                $record->save();
+            }
+            CatalogSectionProduct::onlyTrashed()
+                ->whereIn('id', $productIdsToRestore)
+                ->restore();
+            //  dd($restorableProducts);
+            return response()->json(['message' => 'Soft-deleted records restored and status updated successfully']);
         }
     }
 }
